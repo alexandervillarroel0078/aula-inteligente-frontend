@@ -17,7 +17,8 @@ const Login = () => {
       });
 
       localStorage.setItem("token", res.data.token);
-      navigate("/bienvenido");
+      navigate("/panel");
+
     } catch (err) {
       setMensaje("❌ Credenciales incorrectas o error de conexión");
     }

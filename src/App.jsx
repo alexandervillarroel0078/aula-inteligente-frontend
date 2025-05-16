@@ -2,15 +2,17 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
-import Bienvenido from './pages/Bienvenido';
-import App from './App.jsx';
+import Panel from './pages/Panel';
 
+ 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/bienvenido" element={<Bienvenido />} />
+      
+       <Route path="/panel" element={<Panel />} />
+
       </Routes>
     </BrowserRouter>
   );

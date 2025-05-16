@@ -2,10 +2,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api', // cambia esto según tu backend
+  baseURL: 'http://127.0.0.1:5000', // correcto para Flask
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
 
 export default api;
