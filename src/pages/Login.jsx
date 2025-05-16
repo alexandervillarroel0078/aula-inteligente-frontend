@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:5000/login", {
-        correo,
+        nombre_usuario: correo,
         password,
       });
 
@@ -62,8 +62,8 @@ const Login = () => {
               <label className="flex items-center">
                 <input type="checkbox" className="mr-2" /> Remember me
               </label>
-             <button type="button" className="text-blue-600 hover:underline">Forgot password?</button>
-  </div>
+              <button type="button" className="text-blue-600 hover:underline">Forgot password?</button>
+            </div>
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full font-semibold transition"
@@ -78,8 +78,8 @@ const Login = () => {
 
           <p className="text-sm text-center mt-4 text-gray-600">
             Don’t have an account?{" "}
-        <button type="button" className="text-blue-600 font-semibold hover:underline">Sign up</button>
-   </p>
+            <button type="button" className="text-blue-600 font-semibold hover:underline">Sign up</button>
+          </p>
         </div>
       </div>
     </div>
