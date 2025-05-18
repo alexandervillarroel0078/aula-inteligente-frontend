@@ -59,6 +59,14 @@ const Sidebar = ({ isOpen, toggle }) => {
             { label: "Usuarios", icon: <FaUsers />, path: "/panel/usuarios" },
             { label: "Roles", icon: <FaUserShield />, path: "/panel/roles" },
           ]
+        },
+        ,
+        {
+          label: "Perfil del profesor",
+          children: [
+            { label: "Usuarios", icon: <FaUsers />, path: "/panel/usuarios" },
+            { label: "Roles", icon: <FaUserShield />, path: "/panel/roles" },
+          ]
         }
       ]
     }
