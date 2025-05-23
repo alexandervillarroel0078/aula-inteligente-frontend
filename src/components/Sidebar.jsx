@@ -5,8 +5,20 @@ import {
   FaHome, FaUsers, FaUserShield, FaUserTie, FaBuilding, FaBookOpen, FaSignOutAlt, FaChevronDown, FaChevronRight
 } from "react-icons/fa";
 import { FaShieldAlt } from 'react-icons/fa';
+import { FaChartLine } from "react-icons/fa";
+import { FaClipboardList } from "react-icons/fa";
+import { FaFileUpload } from "react-icons/fa";
+import { FaStickyNote } from "react-icons/fa";
+import { FaCalendarAlt } from 'react-icons/fa';
+import { FaChalkboardTeacher } from 'react-icons/fa';
+import { FaLayerGroup } from 'react-icons/fa';
 
-const Sidebar = () => {
+
+
+
+const Sidebar = ({ isOpen, toggle }) => {
+
+  //const Sidebar = () => {
   const navigate = useNavigate();
   const [openSubmenus, setOpenSubmenus] = useState({});
 
@@ -21,70 +33,47 @@ const Sidebar = () => {
     {
       section: "INICIO",
       links: [
-        { label: "Inicio", icon: <FaHome />, path: "/panel/inicio" }
+        { label: "Inicio", icon: <FaHome />, path: "/panel/" },
+        { label: "Alumnos", icon: <FaUsers />, path: "/panel/alumnos" },
+        { label: "Profesores", icon: <FaUserTie />, path: "/panel/profesores" }
+        , { label: "Materias", icon: <FaBookOpen />, path: "/panel/materias" }
+        , { label: "Notas", icon: <FaBookOpen />, path: "/panel/notas" }
+        , { label: "Asistencias", icon: <FaBookOpen />, path: "/panel/asistencias" },
+        { label: "Participaciones", icon: <FaUserShield />, path: "/panel/participaciones" },
+        { label: "Predicciones", icon: <FaChartLine />, path: "/panel/predicciones" },
+        { label: "Tareas", icon: <FaClipboardList />, path: "/panel/tareas" },
+        { label: "Tareas Entregadas", icon: <FaFileUpload />, path: "/panel/tareas-entregadas" },
+        { label: "Observaciones", icon: <FaStickyNote />, path: "/panel/observaciones" },
+        { label: "Periodos", icon: <FaCalendarAlt />, path: "/panel/periodos" },
+
+        { label: "Roles", icon: <FaShieldAlt />, path: "/panel/roles" },
+
+        { label: "Usuarios", icon: <FaUserShield />, path: "/panel/usuarios" },
+
+        { label: "Asignaciones", icon: <FaChalkboardTeacher />, path: "/panel/asignaciones" }
+
+        ,
+
+        { label: "Grados", icon: <FaLayerGroup />, path: "/panel/grados" }
+
+        ,
+
+        { label: "Bitácora", icon: <FaClipboardList />, path: "/panel/bitacoras" }
+
+
+
+
 
       ]
     },
     {
       section: "MÓDULOS",
       links: [
-        { label: "Alumnos", icon: <FaUsers />, path: "/panel/alumnos" },
-        { label: "Profesores", icon: <FaUserTie />, path: "/panel/profesores" },
-        { label: "Cursos / Aulas (gradop)", icon: <FaBuilding />, path: "/panel/grados" },
-        { label: "Materias", icon: <FaBookOpen />, path: "/panel/materias" },
-        { label: "Períodos", icon: <FaBookOpen />, path: "/panel/periodos" },
-        { label: "Roles", icon: <FaShieldAlt />, path: "/panel/roles" }
-        /*
-        {
-          section: "MÓDULOS",
-          links: [
-            {
-              label: "Gestión Académica",
-              children: [
-                { label: "Alumnos", icon: <FaUsers />, path: "/panel/alumnos" },
-                { label: "Profesores", icon: <FaUserTie />, path: "/panel/profesores" },
-                { label: "Cursos / Aulas (gradop)", icon: <FaBuilding />, path: "/panel/grados" },
-                { label: "Materias", icon: <FaBookOpen />, path: "/panel/materias" },
-                { label: "Períodos", icon: <FaBookOpen />, path: "/panel/periodos" },
-                { label: "Roles", icon: <FaShieldAlt />, path: "/panel/roles" },
-              ]
-            },/*
-            {
-              label: "Evaluaciones",
-              children: [
-                { label: "Notas", icon: <FaBookOpen />, path: "/panel/notas" },
-                { label: "Asistencia", icon: <FaBookOpen />, path: "/panel/asistencias" },
-                { label: "Participación", icon: <FaBookOpen />, path: "/panel/participaciones" },
-                { label: "Observaciones", icon: <FaBookOpen />, path: "/panel/observaciones" },
-              ]
-            },
-            {
-              label: "Complementos",
-              children: [
-                { label: "Tareas", icon: <FaBookOpen />, path: "/panel/tareas" },
-                { label: "Asignaciones", icon: <FaBookOpen />, path: "/panel/asignaciones" },
-                { label: "Predicción", icon: <FaBookOpen />, path: "/panel/prediccion" },
-              ]
-            },
-            {
-              label: "Seguridad",
-              children: [
-                { label: "Usuarios", icon: <FaUsers />, path: "/panel/usuarios" },
-                { label: "Roles", icon: <FaUserShield />, path: "/panel/roles" },
-              ]
-            },
-            ,
-            {
-              label: "Perfil del profesor",
-              children: [
-                { label: "Usuarios", icon: <FaUsers />, path: "/panel/usuarios" },
-                { label: "Roles", icon: <FaUserShield />, path: "/panel/roles" },
-              ]
-            }*/
+        /* aqui los modulos y sub modulos */
       ]
     }
   ];
-
+  /* */
   return (
     <aside className={`
   bg-black text-white fixed top-16 left-0 z-20 w-64 h-[calc(100vh-4rem)]
@@ -92,6 +81,7 @@ const Sidebar = () => {
  translate-x-0
 
 `}>
+
 
       {items.map((section, i) => (
         <div key={i} className="mb-6">
@@ -118,7 +108,7 @@ const Sidebar = () => {
                           className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded cursor-pointer"
                           onClick={() => {
                             navigate(sub.path);
-                           // toggle(); // cerrar sidebar si deseas
+                            // toggle(); // cerrar sidebar si deseas
                           }}
                         >
                           <span>{sub.icon}</span>
@@ -132,10 +122,15 @@ const Sidebar = () => {
                 <li
                   key={j}
                   className="flex items-center space-x-2 hover:bg-gray-700 p-2 rounded cursor-pointer"
+                  /*  onClick={() => {
+                      navigate(link.path);
+                      //   toggle();
+                    }}*/
                   onClick={() => {
                     navigate(link.path);
-                 //   toggle();
+                    if (window.innerWidth < 1024) toggle(); // cerrar en móviles
                   }}
+
                 >
                   <span>{link.icon}</span>
                   <span>{link.label}</span>

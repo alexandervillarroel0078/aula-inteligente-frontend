@@ -4,27 +4,31 @@ import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
-  const [isOpen, setIsOpen] = useState(true); // mostrar u ocultar sidebar
+  const [isOpen, setIsOpen] = useState(false); // por defecto oculto en móviles
 
   return (
-    <div className="flex">
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <Sidebar isOpen={isOpen} toggle={() => setIsOpen(!isOpen)} />
 
       {/* Contenido principal */}
-      <div className="flex-1 min-h-screen transition-all duration-300">
-        {/* Header negro fijo */}
+      <div className="flex flex-col flex-1 overflow-auto">
+        {/* Header */}
         <div className="bg-black text-white h-16 flex items-center justify-between px-6 fixed top-0 left-0 right-0 z-30">
-          <button onClick={() => setIsOpen(!isOpen)} className="text-white text-2xl">
+          <button onClick={() => setIsOpen(!isOpen)} className="text-white text-2xl lg:hidden">
             ☰
           </button>
           <h1 className="text-lg font-semibold">Aula Inteligente</h1>
           <i className="fas fa-user-circle text-2xl"></i>
         </div>
 
-        {/* Ajustar espacio para que el contenido no quede debajo del header */}
-        <div className={`pt-16 transition-all duration-300 ${isOpen ? "ml-64" : "ml-0"}`}>
-          <div className="p-6">
+        {/* Contenido debajo del header */}
+        <div
+          className={`pt-16 transition-all duration-300 ${
+            isOpen ? "lg:ml-64" : "ml-0"
+          }`}
+        >
+          <div className="p-4 w-full overflow-x-auto">
             <Outlet />
           </div>
         </div>

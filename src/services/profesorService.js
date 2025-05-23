@@ -1,38 +1,31 @@
-import axios from './api'; // Este es tu archivo donde se define baseURL
+import api from './api';
 
-const endpoint = '/api/profesores';
-
-
-const profesorService = {
-  // GET: Listar todos los profesores
-  listar: async () => {
-    const res = await axios.get(endpoint);
-    return res.data;
-  },
-
-  // GET: Obtener un profesor por ID
-  obtener: async (id) => {
-    const res = await axios.get(`${endpoint}/${id}`);
-    return res.data;
-  },
-
-  // POST: Crear un nuevo profesor
-  crear: async (datos) => {
-    const res = await axios.post(endpoint, datos);
-    return res.data;
-  },
-
-  // PUT: Actualizar un profesor existente
-  actualizar: async (id, datos) => {
-    const res = await axios.put(`${endpoint}/${id}`, datos);
-    return res.data;
-  },
-
-  // DELETE: Eliminar un profesor
-  eliminar: async (id) => {
-    const res = await axios.delete(`${endpoint}/${id}`);
-    return res.data;
-  }
+// GET - Listar todos los profesores
+export const listarProfesores = async () => {
+  const response = await api.get('/api/profesores');
+  return response.data;
 };
 
-export default profesorService;
+// GET - Obtener un profesor por ID
+export const obtenerProfesor = async (id) => {
+  const response = await api.get(`/api/profesores/${id}`);
+  return response.data;
+};
+
+// POST - Crear un nuevo profesor
+export const crearProfesor = async (data) => {
+  const response = await api.post('/api/profesores', data);
+  return response.data;
+};
+
+// PUT - Actualizar un profesor
+export const actualizarProfesor = async (id, data) => {
+  const response = await api.put(`/api/profesores/${id}`, data);
+  return response.data;
+};
+
+// DELETE - Eliminar un profesor
+export const eliminarProfesor = async (id) => {
+  const response = await api.delete(`/api/profesores/${id}`);
+  return response.data;
+};

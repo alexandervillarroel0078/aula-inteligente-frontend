@@ -1,56 +1,34 @@
 // src/App.jsx
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// 🔐 Autenticación
 import Login from './pages/Login';
-
-// 🧩 Layout general
 import DashboardLayout from './layout/DashboardLayout';
+import Panel from "./pages/Panel";
 
-// 👨‍🎓 Módulo: Alumnos
-import AlumnoListPage from './modules/alumno/pages/AlumnoListPage';
-import AlumnoViewPage from './modules/alumno/pages/AlumnoViewPage';
-import AlumnoInscripcionPage from './modules/alumno/pages/AlumnoInscripcionPage';
 
-// 📚 Módulo: Materias
-import MateriaListPage from './modules/materia/pages/MateriaListPage';
-import MateriaViewPage from './modules/materia/pages/MateriaViewPage';
+import AlumnoListPage from './pages/AlumnoListPage';
+import ProfesorListPage from './pages/ProfesorListPage';
+import MateriaListPage from './pages/MateriaListPage';
+import NotaListPage from './pages/NotaListPage';
+import AsistenciaListPage from './pages/AsistenciaListPage';
+import ParticipacionListPage from './pages/ParticipacionListPage';
+import PrediccionListPage from './pages/PrediccionListPage';
+import TareaListPage from './pages/TareaListPage';
+import TareaEntregadaListPage from './pages/TareaEntregadaListPage';
+import ObservacionListPage from './pages/ObservacionListPage';
+import PeriodoListPage from './pages/PeriodoListPage';
+import RolListPage from './pages/RolListPage';
+import UsuarioListPage from './pages/UsuarioListPage';
+import MateriaProfesorListPage from './pages/MateriaProfesorListPage';
+import GradoListPage from './pages/GradoListPage';
+import BitacoraListPage from './pages/BitacoraListPage';
 
-// 👨‍🏫 Módulo: Profesores
-import ProfesorListPage from './modules/profesor/pages/ProfesorListPage';
-import ProfesorViewPage from './modules/profesor/pages/ProfesorViewPage';
+ 
 
-// 🏫 Módulo: Grados / Cursos
-import GradoListPage from './modules/grado/pages/GradoListPage';
+ 
 
-// 📌 Módulo: Asignaciones (materias a profesores)
-import AsignarMateriaPage from './modules/asignacion/pages/AsignarMateriaPage';
 
-// 📝 Módulo: Notas
-import NotaListPage from './modules/notas/pages/NotaListPage';
-import NotaRegisterPage from './modules/notas/pages/NotaRegisterPage';
 
-// 📋 Módulo: Asistencias
-import AsistenciaListPage from './modules/asistencias/pages/AsistenciaListPage';
-
-// 💬 Módulo: Participaciones
-import ParticipacionListPage from './modules/participaciones/pages/ParticipacionListPage';
-
-// 🧠 Módulo: Predicción IA
-import PrediccionPage from './modules/prediccion/pages/PrediccionPage';
-
-// 🗓️ Módulo: Periodos académicos
-import PeriodoListPage from './modules/periodos/pages/PeriodoListPage';
-
-// 🔍 Módulo: Observaciones del docente
-import ObservacionPage from './modules/observaciones/pages/ObservacionPage';
-
-// 🗃️ Módulo: Tareas
-import TareaListPage from './modules/tareas/pages/TareaListPage';
-import TareaCreatePage from './modules/tareas/pages/TareaCreatePage';
-import RolesListPage from './modules/roles/pages/RolesListPage';
-
-import InicioPage from "./modules/aut/pages/InicioPage";
 function App() {
   return (
     <BrowserRouter>
@@ -58,38 +36,35 @@ function App() {
         <Route path="/" element={<Login />} />
 
         <Route path="/panel" element={<DashboardLayout />}>
+          <Route index element={<Panel />} />
 
-          <Route index element={<InicioPage />} />
-          <Route path="inicio" element={<InicioPage />} />
-          {/* Módulos */}
-          <Route path="alumnos" element={<AlumnoListPage />} />
-          <Route path="alumnos/ver" element={<AlumnoViewPage />} />
-          <Route path="alumnos/inscribir" element={<AlumnoInscripcionPage />} />
+          <Route path="/panel/alumnos" element={<AlumnoListPage />} />
+          <Route path="/panel/profesores" element={<ProfesorListPage />} />
+          <Route path="/panel/materias" element={<MateriaListPage />} />
+          <Route path="/panel/notas" element={<NotaListPage />} />
+          <Route path="/panel/asistencias" element={<AsistenciaListPage />} />
+          <Route path="/panel/participaciones" element={<ParticipacionListPage />} />
+          <Route path="/panel/predicciones" element={<PrediccionListPage />} />
 
-          <Route path="materias" element={<MateriaListPage />} />
-          <Route path="profesor/materias/ver" element={<MateriaViewPage />} />
+          <Route path="/panel/tareas" element={<TareaListPage />} />
 
-          <Route path="profesores" element={<ProfesorListPage />} />
-          <Route path="profesores/ver" element={<ProfesorViewPage />} />
+          <Route path="/panel/tareas-entregadas" element={<TareaEntregadaListPage />} />
 
-          <Route path="grados" element={<GradoListPage />} />
-          <Route path="asignaciones" element={<AsignarMateriaPage />} />
+          <Route path="/panel/observaciones" element={<ObservacionListPage />} />
+<Route path="/panel/periodos" element={<PeriodoListPage />} />
+<Route path="/panel/roles" element={<RolListPage />} />
+<Route path="/panel/usuarios" element={<UsuarioListPage />} />
+ 
+<Route path="/panel/asignaciones" element={<MateriaProfesorListPage />} />
+<Route path="/panel/grados" element={<GradoListPage />} />
+ 
+<Route path="/panel/bitacoras" element={<BitacoraListPage />} />
 
-          <Route path="tareas" element={<TareaListPage />} />
-          <Route path="tareas/nueva" element={<TareaCreatePage />} />
-          <Route path="notas" element={<NotaListPage />} />
-          <Route path="notas/registrar" element={<NotaRegisterPage />} />
+ 
 
-          <Route path="asistencias" element={<AsistenciaListPage />} />
-          <Route path="participaciones" element={<ParticipacionListPage />} />
-          <Route path="prediccion" element={<PrediccionPage />} />
-          <Route path="periodos" element={<PeriodoListPage />} />
-          <Route path="observaciones" element={<ObservacionPage />} />
 
-          <Route path="/panel/roles" element={<RolesListPage />} />
-
-          <Route path="/panel/grados" element={<GradoListPage />} />
         </Route>
+
       </Routes>
     </BrowserRouter>
 

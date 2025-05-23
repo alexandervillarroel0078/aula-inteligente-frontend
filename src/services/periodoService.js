@@ -1,31 +1,31 @@
 import api from './api';
 
-// GET - Listar todas las materias
-export const listarMaterias = async () => {
-  const response = await api.get('/api/materias');
+// GET - Listar todos los periodos
+export const listarPeriodos = async () => {
+  const response = await api.get('/api/periodos');
   return response.data;
 };
 
-// GET - Ver una materia por ID
-export const verMateria = async (id) => {
-  const response = await api.get(`/api/materias/${id}`);
+// GET - Ver un periodo por ID
+export const verPeriodo = async (id) => {
+  const response = await api.get(`/api/periodos/${id}`);
   return response.data;
 };
 
-// POST - Crear una nueva materia
-export const crearMateria = async (materiaData) => {
-  const response = await api.post('/api/materias', materiaData);
+// POST - Crear un nuevo periodo
+export const crearPeriodo = async (periodoData) => {
+  const response = await api.post('/api/periodos', periodoData);
   return response.data;
 };
 
-// PUT - Editar una materia
-export const editarMateria = async (id, materiaData) => {
-  const response = await api.put(`/api/materias/${id}`, materiaData);
+// PUT - Editar un periodo
+export const editarPeriodo = async (id, periodoData) => {
+  const response = await api.put(`/api/periodos/${id}`, periodoData);
   return response.data;
 };
 
-// DELETE - Eliminar una materia
-export const eliminarMateria = async (id) => {
-  const response = await api.delete(`/api/materias/${id}`);
+// DELETE - Eliminar un periodo
+export const eliminarPeriodo = async (id) => {
+  const response = await api.delete(`/api/periodos/${id}`);
   return response.data;
 };
