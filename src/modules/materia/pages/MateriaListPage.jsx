@@ -1,21 +1,30 @@
 // src/modules/materia/pages/MateriaListPage.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import materiaService from '../../../services/materiaService'; // ajusta si tu ruta es diferente
 
 const MateriaListPage = () => {
   const [busqueda, setBusqueda] = useState('');
-  const materias = [
-    { id: 1, nombre: 'Matemáticas', grado: '1ro A', estado: 'Activo' },
-    { id: 2, nombre: 'Lenguaje y Comunicación', grado: '1ro B', estado: 'Activo' },
-    { id: 3, nombre: 'Ciencias Naturales', grado: '2do A', estado: 'Inactivo' },
-    { id: 4, nombre: 'Historia y Geografía', grado: '2do B', estado: 'Activo' },
-    { id: 5, nombre: 'Educación Física', grado: '3ro A', estado: 'Activo' },
-    { id: 6, nombre: 'Tecnología', grado: '3ro B', estado: 'Inactivo' },
-    { id: 7, nombre: 'Inglés', grado: '1ro C', estado: 'Activo' },
-    { id: 8, nombre: 'Música', grado: '2do C', estado: 'Activo' },
-    { id: 9, nombre: 'Educación Artística', grado: '3ro C', estado: 'Inactivo' },
-    { id: 10, nombre: 'Formación Ciudadana', grado: '1ro D', estado: 'Activo' },
-  ];
+  const [mostrarFiltros, setMostrarFiltros] = useState(false);
+  const [mostrarColumnas, setMostrarColumnas] = useState(false);
+  const [mostrarExportar, setMostrarExportar] = useState(false);
+
+
+  const [materias, setMaterias] = useState([]);
+  useEffect(() => {
+    const obtenerMaterias = async () => {
+      try {
+        const data = await materiaService.listar();
+        setMaterias(data);
+      } catch (error) {
+        console.error('❌ Error al obtener materias:', error);
+      }
+    };
+
+    obtenerMaterias();
+  }, []);
+
+
 
   const materiasFiltradas = materias.filter(m =>
     m.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -33,26 +42,19 @@ const MateriaListPage = () => {
       <div className="border rounded shadow p-4 bg-white mb-6">
         <h2 className="text-lg font-semibold text-gray-800 mb-4">📚 Lista de Materias</h2>
 
-        <div className="border rounded shadow p-4 bg-white mb-6">
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Buscar materia o grado..."
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              className="w-full md:w-1/3 border border-gray-300 rounded px-3 py-2"
-            />
-          </div>
-        </div>
 
-        
+
         <div className="overflow-x-auto bg-white p-4 rounded shadow border border-gray-300">
           <table className="min-w-full text-sm">
             <thead className="bg-gray-200 text-gray-700">
               <tr>
                 <th className="px-4 py-2 text-left">#</th>
+                <th className="px-4 py-2 text-left">Código</th>
+
                 <th className="px-4 py-2 text-left">Nombre</th>
                 <th className="px-4 py-2 text-left">Grado</th>
+                <th className="px-4 py-2 text-left">Turno</th> {/* ✅ NUEVO */}
+                <th className="px-4 py-2 text-left">Aula</th>   {/* ✅ NUEVO */}
                 <th className="px-4 py-2 text-left">Estado</th>
                 <th className="px-4 py-2 text-left">Acciones</th>
               </tr>
@@ -61,8 +63,12 @@ const MateriaListPage = () => {
               {materiasFiltradas.map((materia, index) => (
                 <tr key={materia.id} className="border-t hover:bg-gray-100">
                   <td className="px-4 py-2">{index + 1}</td>
+                  <td className="px-4 py-2">{materia.codigo}</td>
+
                   <td className="px-4 py-2">{materia.nombre}</td>
                   <td className="px-4 py-2">{materia.grado}</td>
+                  <td className="px-4 py-2">{materia.turno || '—'}</td> {/* ✅ NUEVO */}
+                  <td className="px-4 py-2">{materia.aula || '—'}</td>   {/* ✅ NUEVO */}
                   <td className="px-4 py-2">
                     <span
                       className={`px-2 py-1 rounded text-white text-xs ${materia.estado === 'Activo' ? 'bg-green-600' : 'bg-red-600'
@@ -84,7 +90,19 @@ const MateriaListPage = () => {
               ))}
             </tbody>
           </table>
+          {/* PAGINACIÓN */}
+          <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
+            <span>Mostrando 1 - 10 de 50 materias</span>
+            <div className="flex gap-1">
+              <button className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Anterior</button>
+              <button className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700">1</button>
+              <button className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">2</button>
+              <button className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">3</button>
+              <button className="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300">Siguiente</button>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   );

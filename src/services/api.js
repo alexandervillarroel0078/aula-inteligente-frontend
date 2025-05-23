@@ -2,10 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:5000', // correcto para Flask
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:5000',
 });
 
 

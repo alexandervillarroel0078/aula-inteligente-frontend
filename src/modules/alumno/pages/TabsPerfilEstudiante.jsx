@@ -36,9 +36,9 @@ const TabsPerfilEstudiante = ({ alumno }) => {
                 return <PrediccionEstudiante />;
             case 'Historial':
                 return <EvolucionEstudiante />;
-           case 'Materias':
-  return <MateriasEstudiante />;
- case 'Notificaciones':
+            case 'Materias':
+                return <MateriasEstudiante />;
+            case 'Notificaciones':
                 return <p>Lista de mensajes o comunicados recibidos.</p>;
             case 'Configuración':
                 return <p>Formulario para cambiar datos del perfil o contraseña.</p>;

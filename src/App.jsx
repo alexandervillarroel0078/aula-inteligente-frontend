@@ -48,43 +48,50 @@ import ObservacionPage from './modules/observaciones/pages/ObservacionPage';
 // 🗃️ Módulo: Tareas
 import TareaListPage from './modules/tareas/pages/TareaListPage';
 import TareaCreatePage from './modules/tareas/pages/TareaCreatePage';
+import RolesListPage from './modules/roles/pages/RolesListPage';
 
+import InicioPage from "./modules/aut/pages/InicioPage";
 function App() {
   return (
     <BrowserRouter>
-  <Routes>
-    <Route path="/" element={<Login />} />
+      <Routes>
+        <Route path="/" element={<Login />} />
 
-    <Route path="/panel" element={<DashboardLayout />}>
-      <Route index element={<p className="text-gray-600">Selecciona un módulo del menú lateral.</p>} />
+        <Route path="/panel" element={<DashboardLayout />}>
 
-      {/* Módulos */}
-      <Route path="alumnos" element={<AlumnoListPage />} />
-      <Route path="alumnos/ver" element={<AlumnoViewPage />} />
-      <Route path="alumnos/inscribir" element={<AlumnoInscripcionPage />} />
+          <Route index element={<InicioPage />} />
+          <Route path="inicio" element={<InicioPage />} />
+          {/* Módulos */}
+          <Route path="alumnos" element={<AlumnoListPage />} />
+          <Route path="alumnos/ver" element={<AlumnoViewPage />} />
+          <Route path="alumnos/inscribir" element={<AlumnoInscripcionPage />} />
 
-      <Route path="materias" element={<MateriaListPage />} />
-      <Route path="profesor/materias/ver" element={<MateriaViewPage />} />
+          <Route path="materias" element={<MateriaListPage />} />
+          <Route path="profesor/materias/ver" element={<MateriaViewPage />} />
 
-      <Route path="profesores" element={<ProfesorListPage />} />
-      <Route path="profesores/ver" element={<ProfesorViewPage />} />
+          <Route path="profesores" element={<ProfesorListPage />} />
+          <Route path="profesores/ver" element={<ProfesorViewPage />} />
 
-      <Route path="grados" element={<GradoListPage />} />
-      <Route path="asignaciones" element={<AsignarMateriaPage />} />
+          <Route path="grados" element={<GradoListPage />} />
+          <Route path="asignaciones" element={<AsignarMateriaPage />} />
 
-      <Route path="tareas" element={<TareaListPage />} />
-      <Route path="tareas/nueva" element={<TareaCreatePage />} />
-      <Route path="notas" element={<NotaListPage />} />
-      <Route path="notas/registrar" element={<NotaRegisterPage />} />
+          <Route path="tareas" element={<TareaListPage />} />
+          <Route path="tareas/nueva" element={<TareaCreatePage />} />
+          <Route path="notas" element={<NotaListPage />} />
+          <Route path="notas/registrar" element={<NotaRegisterPage />} />
 
-      <Route path="asistencias" element={<AsistenciaListPage />} />
-      <Route path="participaciones" element={<ParticipacionListPage />} />
-      <Route path="prediccion" element={<PrediccionPage />} />
-      <Route path="periodos" element={<PeriodoListPage />} />
-      <Route path="observaciones" element={<ObservacionPage />} />
-    </Route>
-  </Routes>
-</BrowserRouter>
+          <Route path="asistencias" element={<AsistenciaListPage />} />
+          <Route path="participaciones" element={<ParticipacionListPage />} />
+          <Route path="prediccion" element={<PrediccionPage />} />
+          <Route path="periodos" element={<PeriodoListPage />} />
+          <Route path="observaciones" element={<ObservacionPage />} />
+
+          <Route path="/panel/roles" element={<RolesListPage />} />
+
+          <Route path="/panel/grados" element={<GradoListPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
 
   );
 }

@@ -1,11 +1,22 @@
 // src/modules/periodos/pages/PeriodoListPage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import periodoService from '../../../services/periodoService'; // ajusta la ruta si es diferente
 
 const PeriodoListPage = () => {
-  const [periodos, setPeriodos] = useState([
-    { id: 1, nombre: '1er Trimestre', gestion: '2024', fechaInicio: '2024-01-15', fechaFin: '2024-04-15' },
-    { id: 2, nombre: '2do Trimestre', gestion: '2024', fechaInicio: '2024-04-16', fechaFin: '2024-07-15' },
-  ]);
+  const [periodos, setPeriodos] = useState([]);
+
+  useEffect(() => {
+    const obtenerPeriodos = async () => {
+      try {
+        const data = await periodoService.listar();
+        setPeriodos(data);
+      } catch (error) {
+        console.error('❌ Error al obtener periodos:', error);
+      }
+    };
+
+    obtenerPeriodos();
+  }, []);
 
   return (
     <div className="p-6">

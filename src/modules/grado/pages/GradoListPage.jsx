@@ -1,14 +1,27 @@
 // src/modules/grado/pages/GradoListPage.jsx
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import gradoService from '../../../services/gradoService'; // ajusta si está en otra ruta
 
-const grados = [
-  { id: 1, nombre: '1ro A', nivel: 'Primaria', turno: 'Mañana' },
-  { id: 2, nombre: '2do B', nivel: 'Secundaria', turno: 'Tarde' },
-  { id: 3, nombre: '3ro C', nivel: 'Primaria', turno: 'Mañana' },
-];
+
+
 
 const GradoListPage = () => {
+
+const [grados, setGrados] = useState([]);
+useEffect(() => {
+  const obtenerGrados = async () => {
+    try {
+      const data = await gradoService.listar();
+      setGrados(data);
+    } catch (error) {
+      console.error('❌ Error al obtener grados:', error);
+    }
+  };
+
+  obtenerGrados();
+}, []);
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
@@ -27,6 +40,10 @@ const GradoListPage = () => {
               <th className="px-4 py-2 text-left">Nivel</th>
               <th className="px-4 py-2 text-left">Turno</th>
               <th className="px-4 py-2 text-left">Acciones</th>
+              <th className="px-4 py-2 text-left">Gestión</th>
+              <th className="px-4 py-2 text-left">Paralelo</th>
+              <th className="px-4 py-2 text-left">Sección</th>
+
             </tr>
           </thead>
           <tbody>
@@ -36,6 +53,10 @@ const GradoListPage = () => {
                 <td className="px-4 py-2">{grado.nombre}</td>
                 <td className="px-4 py-2">{grado.nivel}</td>
                 <td className="px-4 py-2">{grado.turno}</td>
+                <td className="px-4 py-2">{grado.gestion}</td>
+                <td className="px-4 py-2">{grado.paralelo}</td>
+                <td className="px-4 py-2">{grado.seccion}</td>
+
                 <td className="px-4 py-2 space-x-2">
                   <button className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
                     Editar

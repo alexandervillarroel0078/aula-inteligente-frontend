@@ -9,9 +9,9 @@ const Header = ({ toggle }) => {
     <header className="bg-black text-white flex justify-between items-center px-6 py-4 fixed top-0 left-0 w-full z-30 shadow">
       {/* Botón Menú + Título */}
       <div className="flex items-center space-x-4">
-        <button onClick={toggle} className="bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded">
+      {/*  <button onClick={toggle} className="bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded">
           <FaBars />
-        </button>
+        </button>*/}
         <h1 className="text-lg font-bold">Aula Inteligente</h1>
       </div>
 

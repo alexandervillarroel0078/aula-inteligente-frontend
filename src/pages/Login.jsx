@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:5000/login", {
-        nombre_usuario: correo,
+        correo: correo,
         password,
       });
 
@@ -29,14 +29,14 @@ const Login = () => {
       <div className="bg-white/10 backdrop-blur-md rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden max-w-4xl w-full">
         {/* IZQUIERDA */}
         <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-br from-blue-500 to-purple-500 text-white p-10 w-1/2">
-          <h2 className="text-3xl font-bold mb-2">Welcome Back!</h2>
-          <p className="text-sm text-center">To keep connected with us please login with your personal information</p>
+          <h2 className="text-3xl font-bold mb-2">¡Bienvenido/a de nuevo!</h2>
+          <p className="text-sm text-center">Para continuar con tus actividades académicas, inicia sesión con tus credenciales institucionales</p>
         </div>
 
         {/* DERECHA: FORMULARIO */}
         <div className="w-full md:w-1/2 bg-white/20 p-8 backdrop-blur-md">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-1 text-center">Login</h2>
-          <p className="text-sm text-gray-600 text-center mb-6">Sign in to your account</p>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-1 text-center">Ingreso al Sistema</h2>
+          <p className="text-sm text-gray-600 text-center mb-6">Accede con tu cuenta educativa</p>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
@@ -61,9 +61,9 @@ const Login = () => {
             </div>
             <div className="flex justify-between items-center text-sm text-gray-600">
               <label className="flex items-center">
-                <input type="checkbox" className="mr-2" /> Remember me
+                <input type="checkbox" className="mr-2" /> Recuérdame
               </label>
-              <button type="button" className="text-blue-600 hover:underline">Forgot password?</button>
+              <button type="button" className="text-blue-600 hover:underline">¿Olvidaste tu contraseña?</button>
             </div>
             <button
               type="submit"
@@ -78,8 +78,8 @@ const Login = () => {
           )}
 
           <p className="text-sm text-center mt-4 text-gray-600">
-            Don’t have an account?{" "}
-            <button type="button" className="text-blue-600 font-semibold hover:underline">Sign up</button>
+           ¿No tienes una cuenta?{" "}
+            <button type="button" className="text-blue-600 font-semibold hover:underline">Solicitar acceso</button>
           </p>
         </div>
       </div>

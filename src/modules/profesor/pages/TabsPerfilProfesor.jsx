@@ -5,11 +5,10 @@ import MateriasProfesor from '../../materia/pages/MateriasProfesor'; // ajusta l
 import NotasPorMateria from './NotasPorMateria';
 import AsistenciaPorMateria from './AsistenciaPorMateria';
 import ParticipacionPorMateria from './ParticipacionPorMateria';
+import ProfesorViewPage from './ProfesorViewPage';
+import ResumenProfesorPage from './ResumenProfesorPage';
 
-const TabsPerfilProfesor = ({ profesor }) => {
-    const [activeTab, setActiveTab] = useState('Resumen');
-
-    const tabs = [
+const tabs = [
         'Resumen',
         'Materias',
         'Notas',
@@ -17,19 +16,15 @@ const TabsPerfilProfesor = ({ profesor }) => {
         'Participaciones',
         'Configuración',
     ];
+const TabsPerfilProfesor = ({ profesor }) => {
+    const [activeTab, setActiveTab] = useState('Resumen');
+
+    
 
     const renderContent = () => {
         switch (activeTab) {
             case 'Resumen':
-                return (
-                    <div>
-                        <p><strong>Nombre:</strong> {profesor.nombre}</p>
-                        <p><strong>CI:</strong> {profesor.ci}</p>
-                        <p><strong>Teléfono:</strong> {profesor.telefono}</p>
-                        <p><strong>Especialidad:</strong> {profesor.especialidad}</p>
-                        <p><strong>Estado:</strong> Activo</p>
-                    </div>
-                );
+                return <ResumenProfesorPage profesor={profesor} />;
             case 'Materias':
                 return <MateriasProfesor />;
             case 'Notas':
