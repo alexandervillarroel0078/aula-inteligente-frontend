@@ -23,11 +23,8 @@ const DashboardLayout = () => {
         </div>
 
         {/* Contenido debajo del header */}
-        <div
-          className={`pt-16 transition-all duration-300 ${
-            isOpen ? "lg:ml-64" : "ml-0"
-          }`}
-        >
+        <div className={`pt-16 transition-all duration-300 ml-0 lg:ml-64`}>
+
           <div className="p-4 w-full overflow-x-auto">
             <Outlet />
           </div>

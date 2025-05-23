@@ -1,9 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { listarTareasEntregadas } from '../services/tareaEntregadaService';
+import {
+  listarTareasEntregadas,
+  obtenerTareaEntregada,
+  eliminarTareaEntregada
+} from '../services/tareaEntregadaService';
+
+import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 
 const TareaEntregadaListPage = () => {
   const [entregas, setEntregas] = useState([]);
+  const [tareasEntregadas, setTareasEntregadas] = useState([]);
+
   const [cargando, setCargando] = useState(true);
+  const handleVer = async (id) => {
+    const tarea = await obtenerTareaEntregada(id);
+    console.log("📋 Ver tarea entregada:", tarea);
+  };
+
+  const handleEditar = async (id) => {
+    const tarea = await obtenerTareaEntregada(id);
+    console.log("✏️ Editar tarea entregada:", tarea);
+  };
+
+  const handleEliminar = async (id) => {
+    const confirmar = window.confirm("¿Deseas eliminar esta tarea entregada?");
+    if (!confirmar) return;
+
+    await eliminarTareaEntregada(id);
+    setTareasEntregadas(prev => prev.filter(t => t.id !== id));
+    console.log("🗑️ Tarea entregada eliminada:", id);
+  };
 
   useEffect(() => {
     const cargar = async () => {
@@ -22,6 +48,14 @@ const TareaEntregadaListPage = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Tareas Entregadas</h2>
+      <div className="mb-4 text-right">
+        <button
+          onClick={() => console.log("Crear tarea entregada")}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
+        >
+          ➕ Nueva Tarea Entregada
+        </button>
+      </div>
 
       {cargando ? (
         <p className="text-gray-500">Cargando entregas...</p>
@@ -38,6 +72,7 @@ const TareaEntregadaListPage = () => {
                 <th className="px-4 py-2 border-b">Archivo</th>
                 <th className="px-4 py-2 border-b">Fecha de Entrega</th>
                 <th className="px-4 py-2 border-b">Calificación</th>
+                <th className="px-4 py-2 border-b text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -53,6 +88,32 @@ const TareaEntregadaListPage = () => {
                   </td>
                   <td className="px-4 py-2 border-b">{e.fecha_entrega}</td>
                   <td className="px-4 py-2 border-b">{e.calificacion ?? '-'}</td>
+                  <td className="px-4 py-2 border-b text-center">
+                    <div className="flex justify-center gap-2">
+                      <button
+                        onClick={() => handleVer(e.id)}
+                        className="p-1 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600"
+                        title="Ver"
+                      >
+                        <FaEye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleEditar(e.id)}
+                        className="p-1 rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600"
+                        title="Editar"
+                      >
+                        <FaEdit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleEliminar(e.id)}
+                        className="p-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
+                        title="Eliminar"
+                      >
+                        <FaTrash className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+
                 </tr>
               ))}
             </tbody>

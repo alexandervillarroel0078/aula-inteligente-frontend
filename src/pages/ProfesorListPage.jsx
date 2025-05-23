@@ -1,9 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { listarProfesores } from '../services/profesorService';
+import {
+  listarProfesores,
+  obtenerProfesor,
+  eliminarProfesor
+} from '../services/profesorService';
+
+import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 
 const ProfesorListPage = () => {
   const [profesores, setProfesores] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const handleVer = async (id) => {
+    const profesor = await obtenerProfesor(id);
+    console.log("📋 Ver profesor:", profesor);
+  };
+
+  const handleEditar = async (id) => {
+    const profesor = await obtenerProfesor(id);
+    console.log("✏️ Editar profesor:", profesor);
+  };
+
+  const handleEliminar = async (id) => {
+    const confirmar = window.confirm("¿Deseas eliminar este profesor?");
+    if (!confirmar) return;
+
+    await eliminarProfesor(id);
+    setProfesores(prev => prev.filter(p => p.id !== id));
+    console.log("🗑️ Profesor eliminado:", id);
+  };
 
   useEffect(() => {
     const cargarProfesores = async () => {
@@ -23,6 +47,14 @@ const ProfesorListPage = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Listado de Profesores</h2>
+      <div className="mb-4 text-right">
+        <button
+          onClick={() => console.log("Crear profesor")}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
+        >
+          ➕ Nuevo Profesor
+        </button>
+      </div>
 
       {cargando ? (
         <p className="text-gray-500">Cargando profesores...</p>
@@ -41,6 +73,7 @@ const ProfesorListPage = () => {
                 <th className="px-4 py-2 border-b">Teléfono</th>
                 <th className="px-4 py-2 border-b">Dirección</th>
                 <th className="px-4 py-2 border-b">Estado</th>
+                <th className="px-4 py-2 border-b text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -54,6 +87,32 @@ const ProfesorListPage = () => {
                   <td className="px-4 py-2 border-b">{p.telefono}</td>
                   <td className="px-4 py-2 border-b">{p.direccion}</td>
                   <td className="px-4 py-2 border-b">{p.estado}</td>
+                  <td className="px-4 py-2 border-b text-center">
+                    <div className="flex justify-center gap-2">
+                      <button
+                        onClick={() => handleVer(p.id)}
+                        className="p-1 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600"
+                        title="Ver"
+                      >
+                        <FaEye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleEditar(p.id)}
+                        className="p-1 rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600"
+                        title="Editar"
+                      >
+                        <FaEdit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleEliminar(p.id)}
+                        className="p-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
+                        title="Eliminar"
+                      >
+                        <FaTrash className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+
                 </tr>
               ))}
             </tbody>

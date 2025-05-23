@@ -1,9 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { listarNotas } from '../services/notaService';
+import {
+  listarNotas,
+  verNota,
+  eliminarNota
+} from '../services/notaService';
+
+import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 
 const NotaListPage = () => {
   const [notas, setNotas] = useState([]);
   const [cargando, setCargando] = useState(true);
+const handleVer = async (id) => {
+  const nota = await verNota(id);
+  console.log("📋 Ver nota:", nota);
+};
+
+const handleEditar = async (id) => {
+  const nota = await verNota(id);
+  console.log("✏️ Editar nota:", nota);
+};
+
+const handleEliminar = async (id) => {
+  const confirmar = window.confirm("¿Deseas eliminar esta nota?");
+  if (!confirmar) return;
+
+  await eliminarNota(id);
+  setNotas(prev => prev.filter(n => n.id !== id));
+  console.log("🗑️ Nota eliminada:", id);
+};
 
   useEffect(() => {
     const cargarNotas = async () => {
@@ -23,6 +47,14 @@ const NotaListPage = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Listado de Notas</h2>
+<div className="mb-4 text-right">
+  <button
+    onClick={() => console.log("Crear nota")}
+    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
+  >
+    ➕ Nueva Nota
+  </button>
+</div>
 
       {cargando ? (
         <p className="text-gray-500">Cargando notas...</p>
@@ -39,6 +71,8 @@ const NotaListPage = () => {
                 <th className="px-4 py-2 border-b">Periodo</th>
                 <th className="px-4 py-2 border-b">Nota Final</th>
                 <th className="px-4 py-2 border-b">Observaciones</th>
+                <th className="px-4 py-2 border-b text-center">Acciones</th>
+
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -50,7 +84,33 @@ const NotaListPage = () => {
                   <td className="px-4 py-2 border-b">{n.periodo?.nombre || '-'}</td>
                   <td className="px-4 py-2 border-b">{n.nota_final}</td>
                   <td className="px-4 py-2 border-b">{n.observaciones}</td>
-                </tr>
+              <td className="px-4 py-2 border-b text-center">
+  <div className="flex justify-center gap-2">
+    <button
+      onClick={() => handleVer(n.id)}
+      className="p-1 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600"
+      title="Ver"
+    >
+      <FaEye className="w-4 h-4" />
+    </button>
+    <button
+      onClick={() => handleEditar(n.id)}
+      className="p-1 rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600"
+      title="Editar"
+    >
+      <FaEdit className="w-4 h-4" />
+    </button>
+    <button
+      onClick={() => handleEliminar(n.id)}
+      className="p-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
+      title="Eliminar"
+    >
+      <FaTrash className="w-4 h-4" />
+    </button>
+  </div>
+</td>
+
+               </tr>
               ))}
             </tbody>
           </table>
