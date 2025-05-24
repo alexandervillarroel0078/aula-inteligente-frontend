@@ -12,20 +12,58 @@ export const obtenerProfesor = async (id) => {
   return response.data;
 };
 
-// POST - Crear un nuevo profesor
-export const crearProfesor = async (data) => {
-  const response = await api.post('/api/profesores', data);
-  return response.data;
+export const obtenerMateriasDelProfesor = async (profesorId) => {
+  try {
+    const response = await api.get(`/api/profesores/${profesorId}/materias`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error al obtener materias del profesor:', error);
+    throw error;
+  }
 };
 
-// PUT - Actualizar un profesor
-export const actualizarProfesor = async (id, data) => {
-  const response = await api.put(`/api/profesores/${id}`, data);
-  return response.data;
+export const obtenerNotasPorMateria = async (materiaId) => {
+  try {
+    const response = await api.get(`/api/materias/${materiaId}/notas`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error al obtener notas por materia:', error);
+    throw error;
+  }
 };
 
-// DELETE - Eliminar un profesor
-export const eliminarProfesor = async (id) => {
-  const response = await api.delete(`/api/profesores/${id}`);
-  return response.data;
+export const obtenerAsistenciasPorMateria = async (materiaId) => {
+  try {
+    const response = await api.get(`/api/materias/${materiaId}/asistencias`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error al obtener asistencias por materia:', error);
+    throw error;
+  }
 };
+
+// sObtener participaciones por materia
+export const obtenerParticipacionesPorMateria = async (materiaId) => {
+  try {
+    const response = await api.get(`/api/materias/${materiaId}/participaciones`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error al obtener participaciones por materia:', error);
+    throw error;
+  }
+};
+
+// 🔹 Obtener estudiantes por materia
+export const obtenerEstudiantesPorMateria = async (materiaId) => {
+  try {
+    const response = await api.get(`/api/materias/${materiaId}/estudiantes`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error al obtener estudiantes por materia:', error);
+    throw error;
+  }
+};
+
+
+
+

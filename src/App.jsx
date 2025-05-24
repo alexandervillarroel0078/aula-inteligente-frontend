@@ -26,6 +26,13 @@ import TabsEstudiante from './pages/alumnos/TabsEstudiante';
 import NotaMateriaEstudiante from './pages/alumnos/NotaMateriaEstudiante';
 import AsistenciaMateriaEstudiante from './pages/alumnos/AsistenciaMateriaEstudiante';
 
+
+import TabsProfesor from './pages/profesores/TabsProdesor';
+import NotasMateriaProfesor from './pages/profesores/NotasMateriaProfesor';
+import AsistenciasMateriaProfesor from './pages/profesores/AsistenciasMateriaProfesor';
+import ParticipacionesMateriaProfesor from './pages/profesores/ParticipacionesMateriaProfesor';
+import EstudiantesMateriaProfesor from './pages/profesores/EstudiantesMateriaProfesor';
+
 function App() {
   return (
     <BrowserRouter>
@@ -51,11 +58,20 @@ function App() {
           <Route path="grados" element={<GradoListPage />} />
           <Route path="bitacoras" element={<BitacoraListPage />} />
           <Route path="alumnos/:id/tabs" element={<TabsEstudiante />} />
+          {/* Profesores */}
+          <Route path="profesores/:id/tabs" element={<TabsProfesor />} />
+          <Route path="profesor/:profesorId/materia/:materiaId/notas" element={<NotasMateriaProfesor />} />
+          <Route path="profesor/:profesorId/materia/:materiaId/asistencias" element={<AsistenciasMateriaProfesor />} />
+          <Route path="profesor/:profesorId/materia/:materiaId/participaciones" element={<ParticipacionesMateriaProfesor />} />
+          <Route path="profesor/:profesorId/materia/:materiaId/estudiantes" element={<EstudiantesMateriaProfesor />} />
+
         </Route>
 
         {/* Rutas fuera del panel */}
         <Route path="/alumno/:alumnoId/materia/:materiaId/notas" element={<NotaMateriaEstudiante />} />
         <Route path="/alumno/:alumnoId/materia/:materiaId/asistencias" element={<AsistenciaMateriaEstudiante />} />
+
+
       </Routes>
     </BrowserRouter>
   );
