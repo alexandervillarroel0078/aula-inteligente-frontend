@@ -1,4 +1,5 @@
 import api from './api';
+import axios from 'axios';
 
 // GET - Listar todos los profesores
 export const listarProfesores = async () => {
@@ -32,15 +33,38 @@ export const obtenerNotasPorMateria = async (materiaId) => {
   }
 };
 
+// 🔹 Registrar notas por materia
+export const registrarNotasPorMateria = async (materiaId, data) => {
+  try {
+    const response = await api.post(`/api/materias/${materiaId}/notas`, data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error al registrar notas:', error);
+    throw error;
+  }
+};
+
+// 🔹 Obtener resumen de asistencia por materia (todo el año)
 export const obtenerAsistenciasPorMateria = async (materiaId) => {
   try {
     const response = await api.get(`/api/materias/${materiaId}/asistencias`);
     return response.data;
   } catch (error) {
-    console.error('❌ Error al obtener asistencias por materia:', error);
+    console.error('❌ Error al obtener resumen de asistencias:', error);
     throw error;
   }
 };
+// 🔹 Registrar asistencias de una materia
+export const registrarAsistenciasMateria = async (materiaId, data) => {
+  try {
+    const response = await api.post(`/api/materias/${materiaId}/asistencias`, data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error al registrar asistencias:', error);
+    throw error;
+  }
+};
+
 
 // sObtener participaciones por materia
 export const obtenerParticipacionesPorMateria = async (materiaId) => {
@@ -55,13 +79,13 @@ export const obtenerParticipacionesPorMateria = async (materiaId) => {
 
 // 🔹 Obtener estudiantes por materia
 export const obtenerEstudiantesPorMateria = async (materiaId) => {
-  try {
-    const response = await api.get(`/api/materias/${materiaId}/estudiantes`);
-    return response.data;
-  } catch (error) {
-    console.error('❌ Error al obtener estudiantes por materia:', error);
-    throw error;
-  }
+    try {
+        const response = await api.get(`/api/materias/${materiaId}/estudiantes`);
+        return response.data;
+    } catch (error) {
+        console.error('❌ Error al obtener estudiantes por materia:', error);
+        throw error;
+    }
 };
 
 

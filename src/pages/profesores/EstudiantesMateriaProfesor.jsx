@@ -3,17 +3,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { obtenerEstudiantesPorMateria } from '../../services/profesorService';
 
 const EstudiantesMateriaProfesor = () => {
-    const { materiaId } = useParams();
+    const { materiaId, profesorId } = useParams();
     const navigate = useNavigate();
     const [estudiantes, setEstudiantes] = useState([]);
     const [cargando, setCargando] = useState(true);
-const { profesorId } = useParams();
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const fetchEstudiantes = async () => {
             try {
                 const data = await obtenerEstudiantesPorMateria(materiaId);
-                setEstudiantes(data);
+                setEstudiantes(data.estudiantes);
+                setTotal(data.total);
             } catch (error) {
                 console.error('❌ Error al obtener estudiantes:', error);
             } finally {
@@ -28,14 +29,15 @@ const { profesorId } = useParams();
         <div className="p-4">
             {/* Botón volver */}
             <button
-  onClick={() => navigate(`/panel/profesores/${profesorId}/tabs?tab=Materias`)}
-  className="mb-4 px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
->
-  ⬅️ Volver
-</button>
-
-
-            <h2 className="text-xl font-bold text-blue-700 mb-4">Estudiantes de la Materia</h2>
+                onClick={() => navigate(`/panel/profesores/${profesorId}/tabs?tab=Materias`)}
+                className="mb-4 px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+            >
+                ⬅️ Volver
+            </button>
+            {/*total alumno */}
+            <h2 className="text-xl font-bold mb-2">
+                Estudiantes de la Materia <span className="text-sm text-gray-500">(Total: {total})</span>
+            </h2>
 
             {cargando ? (
                 <p className="text-gray-500">Cargando estudiantes...</p>
@@ -43,6 +45,7 @@ const { profesorId } = useParams();
                 <p className="text-gray-500">No hay estudiantes para esta materia.</p>
             ) : (
                 <div className="overflow-x-auto">
+                    {/*tabla de todos los estudiantes de la materia */}
                     <table className="min-w-full border border-gray-300 bg-white shadow text-sm">
                         <thead className="bg-gray-100">
                             <tr className="text-center">
