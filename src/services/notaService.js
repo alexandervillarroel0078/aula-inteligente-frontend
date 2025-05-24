@@ -29,3 +29,8 @@ export const eliminarNota = async (id) => {
   const response = await api.delete(`/api/notas/${id}`);
   return response.data;
 };
+
+export const listarNotasPorAlumno = async (alumnoId) => {
+  const response = await api.get(`/api/notas/alumno/${alumnoId}`);
+  return response.data;
+};

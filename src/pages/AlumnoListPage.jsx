@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import {
-  listarAlumnos,
-  verAlumno,
-  eliminarAlumno
-} from '../services/alumnoService';
+import { listarAlumnos, verAlumno, eliminarAlumno } from '../services/alumnoService';
 
+import { useNavigate } from 'react-router-dom';
 
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 
 const AlumnoListPage = () => {
   const [alumnos, setAlumnos] = useState([]);
   const [cargando, setCargando] = useState(true);
+  /*
   const handleVer = async (id) => {
     const alumno = await verAlumno(id);
     console.log("📋 Ver alumno:", alumno);
-  };
+  };*/
+  const navigate = useNavigate();
 
+const handleVer = (id) => {
+  navigate(`/panel/alumnos/${id}/tabs`);
+};
   const handleEditar = async (id) => {
     const alumno = await verAlumno(id);
     console.log("✏️ Editar alumno:", alumno);

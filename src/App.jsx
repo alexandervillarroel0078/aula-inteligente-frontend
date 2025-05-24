@@ -1,10 +1,9 @@
-// src/App.jsx
+// ✅ App.jsx Corregido (rutas absolutas fuera de /panel)
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import DashboardLayout from './layout/DashboardLayout';
-import Panel from "./pages/Panel";
-
+import Panel from './pages/Panel';
 
 import AlumnoListPage from './pages/AlumnoListPage';
 import ProfesorListPage from './pages/ProfesorListPage';
@@ -23,11 +22,9 @@ import MateriaProfesorListPage from './pages/MateriaProfesorListPage';
 import GradoListPage from './pages/GradoListPage';
 import BitacoraListPage from './pages/BitacoraListPage';
 
- 
-
- 
-
-
+import TabsEstudiante from './pages/alumnos/TabsEstudiante';
+import NotaMateriaEstudiante from './pages/alumnos/NotaMateriaEstudiante';
+import AsistenciaMateriaEstudiante from './pages/alumnos/AsistenciaMateriaEstudiante';
 
 function App() {
   return (
@@ -37,37 +34,30 @@ function App() {
 
         <Route path="/panel" element={<DashboardLayout />}>
           <Route index element={<Panel />} />
-
-          <Route path="/panel/alumnos" element={<AlumnoListPage />} />
-          <Route path="/panel/profesores" element={<ProfesorListPage />} />
-          <Route path="/panel/materias" element={<MateriaListPage />} />
-          <Route path="/panel/notas" element={<NotaListPage />} />
-          <Route path="/panel/asistencias" element={<AsistenciaListPage />} />
-          <Route path="/panel/participaciones" element={<ParticipacionListPage />} />
-          <Route path="/panel/predicciones" element={<PrediccionListPage />} />
-
-          <Route path="/panel/tareas" element={<TareaListPage />} />
-
-          <Route path="/panel/tareas-entregadas" element={<TareaEntregadaListPage />} />
-
-          <Route path="/panel/observaciones" element={<ObservacionListPage />} />
-<Route path="/panel/periodos" element={<PeriodoListPage />} />
-<Route path="/panel/roles" element={<RolListPage />} />
-<Route path="/panel/usuarios" element={<UsuarioListPage />} />
- 
-<Route path="/panel/asignaciones" element={<MateriaProfesorListPage />} />
-<Route path="/panel/grados" element={<GradoListPage />} />
- 
-<Route path="/panel/bitacoras" element={<BitacoraListPage />} />
-
- 
-
-
+          <Route path="alumnos" element={<AlumnoListPage />} />
+          <Route path="profesores" element={<ProfesorListPage />} />
+          <Route path="materias" element={<MateriaListPage />} />
+          <Route path="notas" element={<NotaListPage />} />
+          <Route path="asistencias" element={<AsistenciaListPage />} />
+          <Route path="participaciones" element={<ParticipacionListPage />} />
+          <Route path="predicciones" element={<PrediccionListPage />} />
+          <Route path="tareas" element={<TareaListPage />} />
+          <Route path="tareas-entregadas" element={<TareaEntregadaListPage />} />
+          <Route path="observaciones" element={<ObservacionListPage />} />
+          <Route path="periodos" element={<PeriodoListPage />} />
+          <Route path="roles" element={<RolListPage />} />
+          <Route path="usuarios" element={<UsuarioListPage />} />
+          <Route path="asignaciones" element={<MateriaProfesorListPage />} />
+          <Route path="grados" element={<GradoListPage />} />
+          <Route path="bitacoras" element={<BitacoraListPage />} />
+          <Route path="alumnos/:id/tabs" element={<TabsEstudiante />} />
         </Route>
 
+        {/* Rutas fuera del panel */}
+        <Route path="/alumno/:alumnoId/materia/:materiaId/notas" element={<NotaMateriaEstudiante />} />
+        <Route path="/alumno/:alumnoId/materia/:materiaId/asistencias" element={<AsistenciaMateriaEstudiante />} />
       </Routes>
     </BrowserRouter>
-
   );
 }
 
