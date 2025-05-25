@@ -77,6 +77,24 @@ export const obtenerParticipacionesPorMateria = async (materiaId) => {
   }
 };
 
+
+// profesorService.js
+
+// profesorService.js
+
+export const registrarParticipacionMateria = async (materiaId, payload) => {
+  try {
+    const response = await axios.post(`http://localhost:5000/api/materias/${materiaId}/participaciones`, payload);
+    return response.data;
+  } catch (error) {
+    console.error("Error al registrar participaciones:", error);
+    throw error;
+  }
+};
+
+
+
+
 // 🔹 Obtener estudiantes por materia
 export const obtenerEstudiantesPorMateria = async (materiaId) => {
     try {

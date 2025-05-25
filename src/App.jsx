@@ -34,7 +34,7 @@ import ParticipacionesMateriaProfesor from './pages/profesores/ParticipacionesMa
 import EstudiantesMateriaProfesor from './pages/profesores/EstudiantesMateriaProfesor';
 import RegistroAsistenciaMateria from './pages/profesores/RegistroAsistenciaMateria';
 import RegistroNotasMateria from './pages/profesores/RegistroNotasMateria';
-
+import RegistroParticipacionMateria from './pages/profesores/RegistroParticipacionMateria';
 
 function App() {
   return (
@@ -69,6 +69,7 @@ function App() {
           <Route path="profesor/:profesorId/materia/:materiaId/estudiantes" element={<EstudiantesMateriaProfesor />} />
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/asistencias/nueva" element={<RegistroAsistenciaMateria />} />
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/notas/nueva" element={<RegistroNotasMateria />} />
+          <Route path="/panel/profesores/:profesorId/materias/:materiaId/participaciones/nueva" element={<RegistroParticipacionMateria />} />
         </Route>
 
         {/* Rutas fuera del panel */}
