@@ -8,6 +8,7 @@ const ParticipacionesMateriaProfesor = () => {
   const { materiaId, profesorId } = useParams();
   const navigate = useNavigate();
   const [participaciones, setParticipaciones] = useState([]);
+  
   const [cargando, setCargando] = useState(true);
 
   // Calcular totales por periodo
@@ -21,7 +22,30 @@ const ParticipacionesMateriaProfesor = () => {
     const fetchParticipaciones = async () => {
       try {
         const data = await obtenerParticipacionesPorMateria(materiaId);
-        setParticipaciones(data);
+
+        // Calcular el porcentaje de participación para cada alumno
+        const participacionesConPorcentaje = data.map(p => {
+          const totalClasesPorSemestre = 10; // Total de clases por semestre
+
+          // Sumamos las participaciones de cada semestre
+          const totalSemestre1 = p.periodo1 + p.periodo2;
+          const totalSemestre2 = p.periodo3 + p.periodo4;
+
+          // Calculamos el porcentaje de participación por semestre
+          const porcentajeSemestre1 = totalSemestre1 > 0 ? (totalSemestre1 / totalClasesPorSemestre) * 100 : 0;
+          const porcentajeSemestre2 = totalSemestre2 > 0 ? (totalSemestre2 / totalClasesPorSemestre) * 100 : 0;
+
+          // Porcentaje total de participación (sumando ambos semestres)
+          const porcentajeTotal = (totalSemestre1 + totalSemestre2) > 0 ? ((totalSemestre1 + totalSemestre2) / (totalClasesPorSemestre * 2)) * 100 : 0;
+
+          return {
+            ...p,
+            porcentajeTotal: porcentajeTotal.toFixed(2), // Este es el porcentaje total de participación para cada alumno
+          };
+        });
+
+
+        setParticipaciones(participacionesConPorcentaje);
       } catch (error) {
         console.error('❌ Error al obtener participaciones:', error);
       } finally {
@@ -34,6 +58,8 @@ const ParticipacionesMateriaProfesor = () => {
 
   return (
     <div className="p-4">
+      <h3 className="text-lg font-semibold text-blue-600">borrar en produccion:solo habra 10 participaicon linea: 28 </h3>
+
       {/* Botón volver */}
       <button
         onClick={() => navigate(`/panel/profesores/${profesorId}/tabs?tab=Materias`)}
@@ -58,7 +84,7 @@ const ParticipacionesMateriaProfesor = () => {
               ➕ Registrar Participación
             </button>
           </div>
-          
+
           {/* Total Participaciones por Semestre */}
           <div className="w-1/2">
             <p className="text-sm mt-2 font-semibold text-gray-700">
@@ -91,12 +117,13 @@ const ParticipacionesMateriaProfesor = () => {
                   <tr key={index} className="hover:bg-gray-50 text-center">
                     <td className="px-4 py-2 border-b">{index + 1}</td>
                     <td className="px-4 py-2 border-b">{p.alumno}</td>
-                    <td className="px-4 py-2 border-b">{p.periodo1}</td>
-                    <td className="px-4 py-2 border-b">{p.periodo2}</td>
-                    <td className="px-4 py-2 border-b">{p.periodo3}</td>
-                    <td className="px-4 py-2 border-b">{p.periodo4}</td>
+                    <td className="px-4 py-2 border-b">{p.nota_periodo1}</td>
+                    <td className="px-4 py-2 border-b">{p.nota_periodo2}</td>
+                    <td className="px-4 py-2 border-b">{p.nota_periodo3}</td>
+                    <td className="px-4 py-2 border-b">{p.nota_periodo4}</td>
                     <td className="px-4 py-2 border-b">{p.total_participaciones}</td>
-                    <td className="px-4 py-2 border-b">{p.porcentaje_participacion}%</td>
+                    <td className="px-4 py-2 border-b">{p.porcentajeTotal}%</td>
+
                   </tr>
                 ))}
               </tbody>
@@ -125,7 +152,7 @@ const ParticipacionesMateriaProfesor = () => {
                     <td className="px-4 py-2 border-b">{index + 1}</td>
                     <td className="px-4 py-2 border-b">{p.alumno}</td>
                     <td className="px-4 py-2 border-b">{p.total_participaciones}</td>
-                    <td className="px-4 py-2 border-b">{p.porcentaje_participacion}%</td>
+                    <td className="px-4 py-2 border-b">{p.porcentajeTotal}%</td>
                     <td className="px-4 py-2 border-b">
                       <button className="text-blue-600 hover:underline">Ver</button>
                     </td>
@@ -133,7 +160,7 @@ const ParticipacionesMateriaProfesor = () => {
                 ))}
               </tbody>
             </table>
-
+             
             {/* Gráfica de Participaciones por Bimestre */}
             <h3 className="text-lg font-semibold text-blue-600 mt-8">Comparación de Participaciones por Bimestre</h3>
             <div className="text-sm text-gray-700 mb-4">
@@ -145,10 +172,10 @@ const ParticipacionesMateriaProfesor = () => {
                 <XAxis dataKey="alumno" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="porcentaje_periodo1" fill="#8884d8" name="1er Bim. %" />
-                <Bar dataKey="porcentaje_periodo2" fill="#82ca9d" name="2do Bim. %" />
-                <Bar dataKey="porcentaje_periodo3" fill="#ffc658" name="3er Bim. %" />
-                <Bar dataKey="porcentaje_periodo4" fill="#ff8042" name="4to Bim. %" />
+                <Bar dataKey="periodo1" fill="#8884d8" name="1er Bim. %" />
+                <Bar dataKey="periodo2" fill="#82ca9d" name="2do Bim. %" />
+                <Bar dataKey="periodo3" fill="#ffc658" name="3er Bim. %" />
+                <Bar dataKey="periodo4" fill="#ff8042" name="4to Bim. %" />
               </BarChart>
             </ResponsiveContainer>
           </div>

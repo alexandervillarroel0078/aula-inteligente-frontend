@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { registrarAsistenciasMateria } from '../../services/profesorService';
-
+import axios from 'axios';
 const RegistroAsistenciaMateria = () => {
     const { materiaId, profesorId } = useParams();
     const navigate = useNavigate();
@@ -12,14 +12,28 @@ const RegistroAsistenciaMateria = () => {
 
     // 🔹 Simulación de alumnos (temporal para prueba)
     useEffect(() => {
-        const hoy = new Date().toISOString().split('T')[0]; // formato: yyyy-mm-dd
-        setFecha(hoy);
-        setAlumnos([
-            { id: 1, nombre: 'Carlos Fernández' },
-            { id: 2, nombre: 'Juan Pérez' },
-            { id: 3, nombre: 'María López' },
-        ]);
-    }, []);
+        const fetchAlumnos = async () => {
+            try {
+                // Asegúrate de usar la URL correcta para el backend
+                const response = await axios.get(`http://localhost:5000/api/materias/${materiaId}/estudiantes`);
+
+                // Aquí puedes ver la estructura completa de los datos
+                console.log(response.data);  // Para revisar cómo es la respuesta
+
+                // Si la respuesta tiene la propiedad 'estudiantes', la usamos
+                if (response.data && response.data.estudiantes) {
+                    setAlumnos(response.data.estudiantes);  // Establecer la lista de estudiantes
+                } else {
+                    console.error('❌ No se encontraron estudiantes en la respuesta.');
+                }
+            } catch (error) {
+                console.error('❌ Error al obtener los estudiantes:', error);  // Mostrar mensaje de error
+            }
+        };
+
+        if (materiaId) fetchAlumnos();  // Llamar a la función si materiaId está disponible
+    }, [materiaId]);
+
 
     const toggleAsistencia = (alumnoId) => {
         setAsistencias((prev) => ({
@@ -37,6 +51,9 @@ const RegistroAsistenciaMateria = () => {
                 presente: asistencias[a.id] || false,
             })),
         };
+
+        // Verifica el payload antes de enviarlo
+        console.log(payload);  // Verifica que el formato es el esperado
 
         // Validar que al menos un alumno esté marcado como presente
         const algunoAsistio = payload.asistencias.some(a => a.presente);
@@ -90,7 +107,7 @@ const RegistroAsistenciaMateria = () => {
             <ul className="mb-4 space-y-2">
                 {alumnos.map((a) => (
                     <li key={a.id} className="flex items-center justify-between border-b pb-2">
-                        <span>{a.nombre}</span>
+                        <span>{a.nombre_completo}</span>
                         <label className="inline-flex items-center">
                             <input
                                 type="checkbox"

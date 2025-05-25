@@ -36,49 +36,56 @@ const RegistroParticipacionMateria = () => {
         if (materiaId) fetchAlumnos();  // Llamar a la función si materiaId está disponible
     }, [materiaId]);
 
-const fetchAlumnos = async () => {
-   try {
-      const response = await axios.get(`http://localhost:5000/api/materias/${materiaId}/estudiantes`);
-      console.log(response.data); // Verificar que los datos de alumnos estén llegando correctamente
-      setAlumnos(response.data.estudiantes);
-   } catch (error) {
-      console.error('❌ Error al obtener los estudiantes:', error);
-   }
-};
+    const fetchAlumnos = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/materias/${materiaId}/estudiantes`);
+            console.log(response.data); // Verificar que los datos de alumnos estén llegando correctamente
+            setAlumnos(response.data.estudiantes);
+        } catch (error) {
+            console.error('❌ Error al obtener los estudiantes:', error);
+        }
+    };
 
     const handlePuntajeChange = (alumnoId, value) => {
         setParticipaciones((prev) => ({
             ...prev,
-            [alumnoId]: value,
+            [alumnoId]: value === '' ? 1 : parseInt(value),  // Si no hay valor, asigna 1
         }));
     };
 
+
     const handleGuardar = async () => {
-        const payload = {
-            fecha,
-            periodo_id: periodoId,
-            participaciones: alumnos.map((a) => ({
-                alumno_id: a.id,
-                puntaje: participaciones[a.id] || 0,  // 0 si no tiene puntaje
-            })),
-        };
-
-        // Validar que al menos un alumno haya marcado un puntaje
-        const algunoParticipo = payload.participaciones.some((a) => a.puntaje > 0);
-
-        if (!algunoParticipo) {
-            alert('⚠️ Debes marcar al menos un alumno como participante.');
-            return;
-        }
-
-        try {
-            await registrarParticipacionMateria(materiaId, payload);
-            alert('✅ Participaciones registradas correctamente');
-            navigate(-1);  // Volver a la página anterior
-        } catch (error) {
-            alert('❌ Error al registrar participaciones. Intenta nuevamente.');
-        }
+    const payload = {
+        fecha,
+        periodo_id: periodoId,
+        // Incluimos todos los alumnos, con 1 si no tienen puntaje
+        participaciones: alumnos.map((a) => ({
+            alumno_id: a.id,
+            puntaje: participaciones[a.id] || 1,  // 1 si no tiene puntaje
+        })),
     };
+
+    // Verifica que al menos un alumno tenga un puntaje mayor a 0
+    const algunoParticipo = payload.participaciones.some((a) => a.puntaje > 0);
+
+    if (!algunoParticipo) {
+        alert('⚠️ Debes marcar al menos un alumno como participante.');
+        return;
+    }
+
+    // Log para ver el payload antes de enviarlo
+    console.log("Payload que se enviará:", payload);
+
+    try {
+        await registrarParticipacionMateria(materiaId, payload);
+        alert('✅ Participaciones registradas correctamente');
+        navigate(-1);  // Volver a la página anterior
+    } catch (error) {
+        console.error("Error al registrar participaciones:", error);
+        alert('❌ Error al registrar participaciones. Intenta nuevamente.');
+    }
+};
+
 
     return (
         <div className="p-4 max-w-2xl mx-auto">
@@ -115,15 +122,14 @@ const fetchAlumnos = async () => {
             <ul className="mb-4 space-y-2">
                 {alumnos.map((a) => (
                     <li key={a.id} className="flex items-center justify-between border-b pb-2">
-                        <span>{<span>{a.nombre_completo}</span>
-}</span>
+                        <span>{a.nombre_completo}</span>
                         <label className="inline-flex items-center">
                             <input
                                 type="number"
                                 className="mr-2 w-24 p-2 border rounded"
                                 placeholder="Puntaje"
-                                value={participaciones[a.id] || ''}
-                                onChange={(e) => handlePuntajeChange(a.id, e.target.value)}
+                                value={participaciones[a.id] || ''}  // Si no hay valor, muestra vacío
+                                onChange={(e) => handlePuntajeChange(a.id, e.target.value)}  // Captura el cambio
                                 min="0"
                                 max="100"
                             />
@@ -132,6 +138,7 @@ const fetchAlumnos = async () => {
                     </li>
                 ))}
             </ul>
+
 
             {/* Botones */}
             <div className="flex justify-between">

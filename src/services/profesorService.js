@@ -55,15 +55,17 @@ export const obtenerAsistenciasPorMateria = async (materiaId) => {
   }
 };
 // 🔹 Registrar asistencias de una materia
-export const registrarAsistenciasMateria = async (materiaId, data) => {
-  try {
-    const response = await api.post(`/api/materias/${materiaId}/asistencias`, data);
-    return response.data;
-  } catch (error) {
-    console.error('❌ Error al registrar asistencias:', error);
-    throw error;
-  }
+export const registrarAsistenciasMateria = async (materiaId, payload) => {
+    try {
+        // Verifica que esta URL sea correcta
+        const response = await axios.post(`http://localhost:5000/api/materias/${materiaId}/asistencias`, payload);
+        return response.data;
+    } catch (error) {
+        console.error('Error al registrar asistencia:', error);
+        throw error;
+    }
 };
+
 
 
 // sObtener participaciones por materia
