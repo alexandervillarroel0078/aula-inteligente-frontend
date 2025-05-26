@@ -56,7 +56,7 @@ const MateriasEstudiante = ({ alumnoId }) => {
               {materias.map((m, index) => (
                 <tr key={m.id} className="hover:bg-gray-50 text-center">
                   <td className="px-4 py-2 border-b">{index + 1}</td>
-                  <td className="px-4 py-2 border-b">{m.nombre}</td>
+                  <td className="px-4 py-2 border-b">{m.materia_nombre}</td>
                   <td className="px-4 py-2 border-b">{m.turno}</td>
                   <td className="px-4 py-2 border-b">{m.estado}</td>
                   <td className="px-4 py-2 border-b space-x-1">

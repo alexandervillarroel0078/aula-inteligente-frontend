@@ -159,7 +159,7 @@ const NotasMateriaProfesor = () => {
                 </>
             )}
         </div>
-    );
+    );/*boorar */
 };
 
 export default NotasMateriaProfesor;

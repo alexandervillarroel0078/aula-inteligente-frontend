@@ -73,3 +73,16 @@ export const obtenerAsistenciasPorMateria = async (alumnoId, materiaId) => {
   const response = await api.get(`/api/alumnos/${alumnoId}/materias/${materiaId}/asistencias`);
   return response.data;
 };
+
+// 🟢 Obtener asistencia total por alumno, materia y periodo
+export const obtenerAsistenciaTotal = async (alumnoId, materiaId, periodoId) => {
+  const response = await api.get(`/api/alumnos/${alumnoId}/materias/${materiaId}/periodos/${periodoId}/asistencia`);
+  return response.data;
+};
+
+// Servicio para obtener el detalle de la asistencia
+export const obtenerDetalleAsistencia = async (alumnoId, materiaId, periodoId) => {
+  const response = await api.get(`/api/alumnos/${alumnoId}/materias/${materiaId}/periodos/${periodoId}/asistencia/detalle`);
+  return response.data;
+};
+

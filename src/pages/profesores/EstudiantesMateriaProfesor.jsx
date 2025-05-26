@@ -13,8 +13,8 @@ const EstudiantesMateriaProfesor = () => {
         const fetchEstudiantes = async () => {
             try {
                 const data = await obtenerEstudiantesPorMateria(materiaId);
-                setEstudiantes(data.estudiantes);
-                setTotal(data.total);
+                setEstudiantes(data.estudiantes);  // Asignar solo la lista de estudiantes
+                setTotal(data.total);              // Asignar el total de estudiantes
             } catch (error) {
                 console.error('❌ Error al obtener estudiantes:', error);
             } finally {
@@ -59,7 +59,7 @@ const EstudiantesMateriaProfesor = () => {
                         </thead>
                         <tbody>
                             {estudiantes.map((e, index) => (
-                                <tr key={e.id} className="hover:bg-gray-50 text-center">
+                                <tr key={e.alumno_id} className="hover:bg-gray-50 text-center">
                                     <td className="px-4 py-2 border-b">{index + 1}</td>
                                     <td className="px-4 py-2 border-b">{e.codigo}</td>
                                     <td className="px-4 py-2 border-b">{e.nombre_completo}</td>

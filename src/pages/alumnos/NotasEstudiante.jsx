@@ -6,23 +6,26 @@ const NotasEstudiante = ({ alumnoId }) => {
   const [notas, setNotas] = useState([]);
   const [cargando, setCargando] = useState(true);
 
-
   useEffect(() => {
     const fetchData = async () => {
       setCargando(true);
-      const data = await obtenerNotasAlumno(alumnoId);
+      const data = await obtenerNotasAlumno(alumnoId);  // Llamada a la API para obtener las notas
       setNotas(data);
       setCargando(false);
     };
-    if (alumnoId) fetchData();
-  }, [alumnoId]);
-  const promedio = notas.length > 0
-    ? (notas.reduce((acc, curr) => acc + curr.nota_final, 0) / notas.length).toFixed(2)
-    : "0.00"; // ✅
+    if (alumnoId) fetchData();  // Si hay un alumnoId, ejecutamos fetchData
+  }, [alumnoId]);  // Dependencia de alumnoId
 
+  // Calcular el promedio
+  const promedio = notas.length > 0
+    ? (notas.reduce((acc, curr) => acc + curr.nota, 0) / notas.length).toFixed(2)
+    : "0.00";
+
+  // Función para ver detalles de la nota
   const handleVer = (notaId) => {
-    alert(`Ver detalle de la nota ID: ${notaId}`); // ✅
+    alert(`Ver detalle de la nota ID: ${notaId}`);
   };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Notas</h2>
@@ -42,7 +45,9 @@ const NotasEstudiante = ({ alumnoId }) => {
                 <th className="px-4 py-2 border-b">#</th>
                 <th className="px-4 py-2 border-b">Materia</th>
                 <th className="px-4 py-2 border-b">Periodo</th>
+                <th className="px-4 py-2 border-b">Tipo Parcial</th>
                 <th className="px-4 py-2 border-b">Nota Final</th>
+                <th className="px-4 py-2 border-b">observaciones</th>
                 <th className="px-4 py-2 border-b">Acciones</th>
               </tr>
             </thead>
@@ -52,11 +57,9 @@ const NotasEstudiante = ({ alumnoId }) => {
                   <td className="px-4 py-2 border-b">{index + 1}</td>
                   <td className="px-4 py-2 border-b">{n.materia_nombre}</td>
                   <td className="px-4 py-2 border-b">{n.periodo_nombre}</td>
-                  <td className="px-4 py-2 border-b">
-                    <span className={`px-2 py-1 rounded-full text-white text-xs ${n.nota_final >= 51 ? 'bg-green-500' : 'bg-red-500'}`}>
-                      {n.nota_final}
-                    </span>
-                  </td>
+                  <td className="px-4 py-2 border-b">{n.tipo_parcial}</td>
+                  <td className="px-4 py-2 border-b">{n.nota_final}</td>
+                  <td className="px-4 py-2 border-b">{n.observaciones}</td>
                   <td className="px-4 py-2 border-b">
                     <button
                       onClick={() => handleVer(n.id)}

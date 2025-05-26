@@ -25,7 +25,7 @@ import BitacoraListPage from './pages/BitacoraListPage';
 import TabsEstudiante from './pages/alumnos/TabsEstudiante';
 import NotaMateriaEstudiante from './pages/alumnos/NotaMateriaEstudiante';
 import AsistenciaMateriaEstudiante from './pages/alumnos/AsistenciaMateriaEstudiante';
-
+import AsistenciaDetalleEstudiante from './pages/alumnos/AsistenciaDetalleEstudiante';
 
 import TabsProfesor from './pages/profesores/TabsProdesor';
 import NotasMateriaProfesor from './pages/profesores/NotasMateriaProfesor';
@@ -70,7 +70,12 @@ function App() {
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/asistencias/nueva" element={<RegistroAsistenciaMateria />} />
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/notas/nueva" element={<RegistroNotasMateria />} />
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/participaciones/nueva" element={<RegistroParticipacionMateria />} />
+
+          <Route path="asistencia/:id" element={<AsistenciaDetalleEstudiante />} /> {/* Ruta correcta aquí */}
+          <Route path="asistencia/:alumnoId/:materiaId/:periodoId" element={<AsistenciaDetalleEstudiante />} />
+
         </Route>
+
 
         {/* Rutas fuera del panel */}
         <Route path="/alumno/:alumnoId/materia/:materiaId/notas" element={<NotaMateriaEstudiante />} />
