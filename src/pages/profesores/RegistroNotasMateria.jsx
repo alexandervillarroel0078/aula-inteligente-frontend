@@ -1,134 +1,123 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RegistroNotasMateria = () => {
-    const { materiaId } = useParams();  // Obtenemos el ID de la materia desde la URL
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [fecha, setFecha] = useState('');  // Estado para la fecha
-    const [periodoId, setPeriodoId] = useState(1);  // Bimestre seleccionado
-    const [alumnos, setAlumnos] = useState([]);  // Lista de alumnos
-    const [notas, setNotas] = useState({});  // Estado para las notas de los alumnos
-
-    useEffect(() => {
-        const fetchAlumnos = async () => {
-            try {
-                // Asegúrate de usar la URL correcta para el backend
-                const response = await axios.get(`http://localhost:5000/api/materias/${materiaId}/estudiantes`);
-                setAlumnos(response.data.estudiantes);  // Establecer la lista de estudiantes
-            } catch (error) {
-                console.error('❌ Error al obtener los estudiantes:', error);  // Mostrar mensaje de error
-            }
-        };
-
-        if (materiaId) fetchAlumnos();  // Llamar a la función si materiaId está disponible
-    }, [materiaId]);  // Ejecutar cuando cambie materiaId
-
-    // Maneja el cambio de las notas de un alumno
-    const handleNotaChange = (alumnoId, bimestre, valor) => {
-        setNotas(prevNotas => ({
-            ...prevNotas,
-            [alumnoId]: {
-                ...prevNotas[alumnoId],
-                [`b${bimestre}_parcial`]: valor,  // Guardamos la nota del parcial
-            },
-        }));
-    };
-
-    // Enviar las notas al servidor
-    const handleGuardar = async () => {
-        const payload = {
-            notas: alumnos.map((a) => ({
-                alumno_id: a.id,
-                periodo_id: periodoId,
-                parcial: parseFloat(notas[a.id]?.[`b${periodoId}_parcial`]) || 0,
-            })),
-        };
-
-        try {
-            // Cambia la URL para que apunte al backend en el puerto correcto
-            const response = await axios.post(`http://localhost:5000/api/materias/${materiaId}/notas`, payload);
-            alert('✅ Notas registradas con éxito');
-            navigate(-1);  // Redirige al usuario a la pantalla anterior
-        } catch (error) {
-            console.error('❌ Error al registrar notas:', error);
-            alert('❌ Hubo un error al registrar las notas');
-        }
-    };
+  const handleVolver = () => {
+    navigate('/panel/profesor/notas-materia'); // Redirige a la página de NotasMateriaProfesor
+  };
 
 
+  return (
+    <div className="px-4 sm:px-6 lg:px-8">
+      <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Registrar Notas para la Materia</h2>
 
-    return (
-        <div className="p-4 max-w-2xl mx-auto">
-            <h2 className="text-xl font-semibold text-blue-600 mb-4">Registrar Notas</h2>
-
-            {/* Campo para la fecha */}
-            <div className="mb-4">
-                <label className="block mb-1 text-sm font-medium text-gray-700">Fecha</label>
-                <input
-                    type="date"
-                    className="w-full border rounded px-3 py-2"
-                    value={fecha}
-                    onChange={(e) => setFecha(e.target.value)}
-                />
-            </div>
-
-            {/* Campo para seleccionar el bimestre */}
-            <div className="mb-4">
-                <label className="block mb-1 text-sm font-medium text-gray-700">Periodo (Bimestre)</label>
-                <select
-                    className="w-full border rounded px-3 py-2"
-                    value={periodoId}
-                    onChange={(e) => setPeriodoId(Number(e.target.value))}
-                >
-                    <option value={1}>1er Bimestre</option>
-                    <option value={2}>2do Bimestre</option>
-                    <option value={3}>3er Bimestre</option>
-                    <option value={4}>4to Bimestre</option>
-                </select>
-            </div>
-
-            {/* Lista de alumnos y sus notas */}
-            <h4 className="text-md font-semibold mb-2">Notas por Alumno</h4>
-            <ul className="mb-4 space-y-4">
-                {alumnos.length > 0 ? (
-                    alumnos.map((a) => (
-                        <li key={a.id} className="border p-4 rounded bg-gray-50">
-                            <p className="font-medium mb-2">{a.nombre_completo}</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <input
-                                    type="number"
-                                    placeholder="Nota del Parcial"
-                                    className="border rounded px-3 py-1"
-                                    value={notas[a.id]?.[`b${periodoId}_parcial`] || ''}
-                                    onChange={(e) => handleNotaChange(a.id, periodoId, e.target.value)}
-                                />
-                            </div>
-                        </li>
-                    ))
-                ) : (
-                    <p>No hay alumnos registrados en esta materia.</p>
-                )}
-            </ul>
-
-            {/* Botones para guardar o cancelar */}
-            <div className="flex justify-between">
-                <button
-                    onClick={() => navigate(-1)}
-                    className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                >
-                    ⬅️ Cancelar
-                </button>
-                <button
-                    onClick={handleGuardar}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                    💾 Guardar Notas
-                </button>
-            </div>
+      <form className="space-y-4">
+        {/* Selector de Alumno */}
+        <div className="flex flex-col">
+          <label htmlFor="alumno" className="text-sm font-medium text-gray-700">Seleccionar Alumno</label>
+          <select
+            id="alumno"
+            className="p-2 border border-gray-300 rounded"
+            required
+          >
+            <option value="">Selecciona un Alumno</option>
+            {/* Aquí deberían aparecer los alumnos */}
+            <option value="1">Luis Mendoza Pérez</option>
+            <option value="2">Carla Romero García</option>
+            {/* Agregar más opciones */}
+          </select>
         </div>
-    );
+
+        {/* Selector de Periodo */}
+        <div className="flex flex-col">
+          <label htmlFor="periodo" className="text-sm font-medium text-gray-700">Seleccionar Periodo</label>
+          <select
+            id="periodo"
+            className="p-2 border border-gray-300 rounded"
+            required
+          >
+            <option value="">Selecciona un Periodo</option>
+            {/* Aquí deberían aparecer los periodos */}
+            <option value="1">1er Bimestre 2022</option>
+            <option value="2">2do Bimestre 2022</option>
+            {/* Agregar más opciones */}
+          </select>
+        </div>
+
+        {/* Selector de Grado */}
+        <div className="flex flex-col">
+          <label htmlFor="grado" className="text-sm font-medium text-gray-700">Seleccionar Grado</label>
+          <select
+            id="grado"
+            className="p-2 border border-gray-300 rounded"
+            required
+          >
+            <option value="">Selecciona un Grado</option>
+            {/* Aquí deberían aparecer los grados */}
+            <option value="1">1ro A</option>
+            <option value="2">2do B</option>
+            {/* Agregar más opciones */}
+          </select>
+        </div>
+
+        {/* Notas y Observaciones */}
+        <div className="flex flex-col sm:flex-row sm:space-x-4">
+          <div className="flex flex-col sm:w-1/3">
+            <label htmlFor="notaParcial" className="text-sm font-medium text-gray-700">Nota Parcial</label>
+            <input
+              type="number"
+              id="notaParcial"
+              className="p-2 border border-gray-300 rounded"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col sm:w-1/3">
+            <label htmlFor="notaParticipacion" className="text-sm font-medium text-gray-700">Nota Participación</label>
+            <input
+              type="number"
+              id="notaParticipacion"
+              className="p-2 border border-gray-300 rounded"
+            />
+          </div>
+
+          <div className="flex flex-col sm:w-1/3">
+            <label htmlFor="notaAsistencia" className="text-sm font-medium text-gray-700">Nota Asistencia</label>
+            <input
+              type="number"
+              id="notaAsistencia"
+              className="p-2 border border-gray-300 rounded"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <label htmlFor="observaciones" className="text-sm font-medium text-gray-700">Observaciones</label>
+          <textarea
+            id="observaciones"
+            className="p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Registrar Nota
+          </button>
+          <button
+            onClick={() => navigate(-1)} // Navega hacia la página anterior
+            className="mb-4 px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+          >
+            ⬅️ Volver
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default RegistroNotasMateria;

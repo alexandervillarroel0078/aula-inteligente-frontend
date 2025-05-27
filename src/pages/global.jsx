@@ -63,32 +63,77 @@ const Global = () => {
     <div>
       <h2>Listado de Globals</h2>
 
-      {/* Filtros */}
-      <div className="mb-4">
-        <input
-          type="text"
-          name="tipo"
-          value={filters.tipo}
-          onChange={handleFilterChange}
-          placeholder="Filtrar por tipo..."
-          className="border p-2 rounded"
-        />
-        <input
-          type="text"
-          name="gestion"
-          value={filters.gestion}
-          onChange={handleFilterChange}
-          placeholder="Filtrar por gestión..."
-          className="border p-2 rounded ml-2"
-        />
-        <button
-          onClick={handleFilterClick}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
-        >
-          Filtrar
-        </button>
+      {/* Contenedor de Filtros */}
+      <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+        <h3 className="text-xl font-semibold mb-4">Filtros</h3>
+        <div className="grid grid-cols-8 gap-2">
+          <input
+            type="text"
+            name="tipo"
+            value={filters.tipo}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por tipo..."
+            className="border p-1 rounded text-sm"
+          />
+          <input
+            type="text"
+            name="gestion"
+            value={filters.gestion}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por gestión..."
+            className="border p-1 rounded text-sm"
+          />
+          <input
+            type="text"
+            name="nombre"
+            value={filters.nombre}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por nombre..."
+            className="border p-1 rounded text-sm"
+          />
+          <input
+            type="text"
+            name="grado"
+            value={filters.grado}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por grado..."
+            className="border p-1 rounded text-sm"
+          />
+          <input
+            type="text"
+            name="materia"
+            value={filters.materia}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por materia..."
+            className="border p-1 rounded text-sm"
+          />
+          <input
+            type="text"
+            name="periodo"
+            value={filters.periodo}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por periodo..."
+            className="border p-1 rounded text-sm"
+          />
+          <input
+            type="number"
+            name="puntaje"
+            value={filters.puntaje}
+            onChange={handleFilterChange}
+            placeholder="Filtrar por puntaje..."
+            className="border p-1 rounded text-sm"
+          />
+          <button
+            onClick={handleFilterClick}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
+          >
+            Filtrar
+          </button>
+        </div>
       </div>
 
+
+      <th className="border px-4 py-2">historial</th>
       {globals.length === 0 ? (
         <p>No hay registros.</p>
       ) : (

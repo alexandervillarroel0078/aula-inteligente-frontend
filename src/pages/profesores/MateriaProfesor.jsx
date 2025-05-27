@@ -63,29 +63,20 @@ const MateriasProfesor = ({ profesorId }) => {
                                         >
                                             Notas
                                         </button>
-
-
-
-                                        {/* <button
-                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/notas`)}
-                                            className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
-                                        >
-                                            Notas
-                                        </button> */}
                                         <button
-                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/asistencias`)}
+                                            onClick={() =>
+                                                navigate(`/panel/profesor/${profesorId}/materia/${m.id}/asistencias?grado_id=${m.grado_id}`)
+                                            }
                                             className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
                                         >
                                             Asistencias
                                         </button>
-
                                         <button
                                             onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/participaciones?grado_id=${m.grado_id}`)}
                                             className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200"
                                         >
                                             Participaciones
                                         </button>
-
                                         <button
                                             onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/estudiantes`)}
                                             className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200"

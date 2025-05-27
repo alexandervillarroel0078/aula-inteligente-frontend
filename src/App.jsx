@@ -69,7 +69,11 @@ function App() {
           <Route path="profesor/:profesorId/materia/:materiaId/participaciones" element={<ParticipacionesMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/estudiantes" element={<EstudiantesMateriaProfesor />} />
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/asistencias/nueva" element={<RegistroAsistenciaMateria />} />
-          <Route path="/panel/profesores/:profesorId/materias/:materiaId/notas/nueva" element={<RegistroNotasMateria />} />
+          {/* <Route path="/panel/profesores/:profesorId/materias/:materiaId/notas/nueva" element={<RegistroNotasMateria />} /> */}
+          <Route path="/panel/profesor/registro-asistencia" element={<RegistroAsistenciaMateria />} />
+          <Route path="/panel/profesor/registro-participacion" element={<RegistroParticipacionMateria />} />
+          <Route path="/panel/profesor/registro-notas" element={<RegistroNotasMateria />} />
+
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/participaciones/nueva" element={<RegistroParticipacionMateria />} />
 
           <Route path="asistencia/:id" element={<AsistenciaDetalleEstudiante />} /> {/* Ruta correcta aquí */}

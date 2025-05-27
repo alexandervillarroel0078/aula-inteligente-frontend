@@ -1,192 +1,157 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { obtenerAsistenciasPorMateria,obtenerNotasFinalAsistencia } from '../../services/profesorService';
-import { PieChart, Pie, Cell, Legend } from 'recharts';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useParams, useSearchParams, useLocation } from 'react-router-dom';  // Asegúrate de importar useLocation
+import { obtenerAsistenciasPorProfesorMateriaGrado } from '../../services/profesorService';
+import { useNavigate } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const AsistenciasMateriaProfesor = () => {
-  const { materiaId, profesorId } = useParams();
+  const { profesorId, materiaId } = useParams();  // Obtener los parámetros de la URL (profesor y materia)
+  const { search } = useLocation();  // Obtener los parámetros de la URL, como el grado_id
+  const [asistencias, setAsistencias] = useState([]);  // Renombrar a 'asistencias' para ser consistente
+  const [loading, setLoading] = useState(true);
+  const [materiaNombre, setMateriaNombre] = useState("");  // Para almacenar el nombre de la materia
+  const [searchParams] = useSearchParams();
+  const gradoId = searchParams.get("grado_id");  // Obtener el grado_id de los query params
   const navigate = useNavigate();
-  const [asistencias, setAsistencias] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const totalPeriodo1 = asistencias.reduce((sum, a) => sum + (a.periodo1 || 0), 0);
-  const totalPeriodo2 = asistencias.reduce((sum, a) => sum + (a.periodo2 || 0), 0);
-  const totalPeriodo3 = asistencias.reduce((sum, a) => sum + (a.periodo3 || 0), 0);
-  const totalPeriodo4 = asistencias.reduce((sum, a) => sum + (a.periodo4 || 0), 0);
-  const totalGeneral = totalPeriodo1 + totalPeriodo2 + totalPeriodo3 + totalPeriodo4;
-  const [notas, setNotas] = useState([]);
-  const [error, setError] = useState(null);
-
-  const totalClasesPeriodo = {
-    periodo1: 35,
-    periodo2: 35,
-    periodo3: 35,
-    periodo4: 35,
+  const [chartData, setChartData] = useState([]);
+  const handleRegistroAsistencia = () => {
+    // Redirige a la ruta de RegistroAsistenciaMateria
+    navigate('/panel/profesor/registro-asistencia');  // Asegúrate de que la ruta sea la correcta
   };
+  useEffect(() => {
+    const prepararDatosGrafica = () => {
+      const dataGrafica = asistencias.map(asistencia => ({
+        nombre: asistencia.alumno_nombre,
+        asistencias: asistencia.total_asistencias,
+        faltas: asistencia.total_faltas,
+      }));
+      setChartData(dataGrafica);
+    };
 
-  const procesarAsistencias = (data) => {
-    return data.map((a) => {
-      const asistenciasPresentes =
-        (a.periodo1 || 0) +
-        (a.periodo2 || 0) +
-        (a.periodo3 || 0) +
-        (a.periodo4 || 0);
+    if (asistencias.length > 0) {
+      prepararDatosGrafica();
+    }
+  }, [asistencias]);
 
-      const porcentaje_final_asistencia =
-        a.total_clases > 0
-          ? Math.round((asistenciasPresentes / a.total_clases) * 100)
-          : 0;
-
-      return {
-        ...a,
-        asistenciasPresentes,
-        porcentaje_final_asistencia,
-      };
-    });
+  const handleVolver = () => {
+    navigate('/panel/estudiantes/materias');  // Cambia esta ruta por la que necesites
   };
-
   useEffect(() => {
     const fetchAsistencias = async () => {
       try {
-        const data = await obtenerAsistenciasPorMateria(materiaId);
-        const procesadas = procesarAsistencias(data);
-        setAsistencias(procesadas);
+        // Verificar que los parámetros existan
+        if (!profesorId || !materiaId || !gradoId) {
+          console.error("Faltan parámetros para la solicitud.");
+          setLoading(false);
+          return;  // Detiene la ejecución si faltan parámetros
+        }
+
+        const data = await obtenerAsistenciasPorProfesorMateriaGrado(profesorId, materiaId, gradoId);
+        setMateriaNombre(data.materia_nombre);  // Asignamos el nombre de la materia desde el backend
+        setAsistencias(data.asistencias);  // Guardamos las asistencias
       } catch (error) {
-        console.error('❌ Error al obtener asistencias:', error);
+        console.error("Error al obtener las asistencias:", error);
       } finally {
-        setCargando(false);
+        setLoading(false);  // Cambia a 'false' al finalizar la carga
       }
     };
 
-    if (materiaId) fetchAsistencias();
-  }, [materiaId]);
-
+    if (gradoId) {
+      fetchAsistencias();  // Solo llamar la API si tenemos el 'gradoId'
+    }
+  }, [profesorId, materiaId, gradoId]);  // Dependencias para volver a ejecutar si alguno cambia
 
   return (
-    <div className="p-4">
-      {/* Botón volver */}
-      <button
-        onClick={() => navigate(`/panel/profesores/${profesorId}/tabs?tab=Materias`)}
-        className="mb-4 px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
-      >
-        ⬅️ Volver
-      </button>
+    <div className="px-4 sm:px-6 lg:px-8">
+      <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Asistencias de los Alumnos</h2>
 
-      {cargando ? (
+      {loading ? (
         <p className="text-gray-500">Cargando asistencias...</p>
       ) : asistencias.length === 0 ? (
-        <p className="text-gray-500">No hay asistencias registradas para esta materia.</p>
+        <p className="text-gray-500">No hay asistencias registradas.</p>
       ) : (
-        <>
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-blue-600">Asistencias por Periodo</h3>
 
-            <button
-              onClick={() => navigate(`/panel/profesores/${profesorId}/materias/${materiaId}/asistencias/nueva`)}
-              className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+        <div className="overflow-x-auto">
+          <button
+                onClick={() => navigate(`/panel/profesores/${profesorId}/tabs?tab=Materias`)}
+                className="mb-4 px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
             >
-              ➕ Registrar Asistencia
+                ⬅️ Volver
             </button>
+          <div className="flex justify-between items-center mb-4">
+            {/* Título */}
+            <h3 className="text-lg font-semibold text-blue-600">Participaciones por Periodo</h3>
 
+            {/* Botón */}
+            <button
+                    onClick={handleRegistroAsistencia}  // Asigna la función al botón
+                    className="px-4 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                    ➕ Registrar asistencia
+                </button>
           </div>
-          {/* Total Clases por Semestre */}
-          <div className="w-1/2">
-            <p className="text-sm mt-2 font-semibold text-gray-700">
-              Total general de asistencias: <span className="text-blue-600">{totalGeneral}</span>
-            </p>
-            <ul className="text-sm text-gray-700 list-disc list-inside">
-              <li>1er Semestre: {totalPeriodo1}</li>
-              <li>2do Semestre: {totalPeriodo2}</li>
-              <li>3er Semestre: {totalPeriodo3}</li>
-              <li>4to Semestre: {totalPeriodo4}</li>
-            </ul>
-          </div>
-
-
-          <div className="overflow-x-auto mb-8">
-            <table className="min-w-full border border-gray-300 bg-white shadow text-sm">
-              <thead className="bg-gray-100">
-                <tr className="text-center">
-                  <th className="px-4 py-2 border-b">#</th>
-                  <th className="px-4 py-2 border-b">Alumno</th>
-                  <th className="px-4 py-2 border-b">1er Bim.</th>
-                  <th className="px-4 py-2 border-b">2do Bim.</th>
-                  <th className="px-4 py-2 border-b">3er Bim.</th>
-                  <th className="px-4 py-2 border-b">4to Bim.</th>
-                  <th className="px-4 py-2 border-b">Total asis. anual Clases</th>
-                  <th className="px-4 py-2 border-b">Nota final Asistencia</th>
-                  <th className="px-4 py-2 border-b">% Asistencia</th>
+          <table className="min-w-full border border-gray-300 bg-white shadow text-xs sm:text-sm">
+            <thead className="bg-gray-100">
+              <tr className="text-center">
+                <th className="px-4 py-2 border-b">#</th>
+                <th className="px-4 py-2 border-b">Alumno</th>
+                <th className="px-4 py-2 border-b">Grado</th>
+                <th className="px-4 py-2 border-b">Periodo</th>
+                <th className="px-4 py-2 border-b">Total Asistencias</th>
+                <th className="px-4 py-2 border-b">Total Faltas</th>
+                <th className="px-4 py-2 border-b">Porcentaje Asistencia</th>
+                <th className="px-4 py-2 border-b">puntaje</th>
+                <th className="px-4 py-2 border-b">acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {asistencias.map((asistencia, index) => (
+                <tr key={asistencia.alumno_id} className="hover:bg-gray-50 text-center">
+                  <td className="px-4 py-2 border-b">{index + 1}</td>
+                  <td className="px-4 py-2 border-b">{asistencia.alumno_nombre}</td>
+                  <td className="px-4 py-2 border-b">{asistencia.nombre_grado}</td>
+                  <td className="px-4 py-2 border-b">{asistencia.nombre_periodo}</td>
+                  <td className="px-4 py-2 border-b">{asistencia.total_asistencias}</td>
+                  <td className="px-4 py-2 border-b">{asistencia.total_faltas}</td>
+                  <td className="px-4 py-2 border-b">{asistencia.porcentaje_asistencia}%</td>
+                  <td className="px-4 py-2 border-b">{asistencia.puntaje}</td>
+                  <td className="border px-4 py-2 text-center">
+                    <button
+                      className="text-blue-600 hover:text-blue-800 border-b-2 border-transparent hover:border-blue-600"
+                    >
+                      Ver
+                    </button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {asistencias.map((a, index) => (
-                  <tr key={index} className="hover:bg-gray-50 text-center">
-                    <td className="px-4 py-2 border-b">{index + 1}</td>
-                    <td className="px-4 py-2 border-b">{a.alumno}</td>
-                    <td className="px-4 py-2 border-b">{a.periodo1}</td>
-                    <td className="px-4 py-2 border-b">{a.periodo2}</td>
-                    <td className="px-4 py-2 border-b">{a.periodo3}</td>
-                    <td className="px-4 py-2 border-b">{a.periodo4}</td>
-                    <td className="px-4 py-2 border-b">{a.total_clases}</td>
-                  <td className="px-4 py-2 border-b">{a.nota_final_asistencia}</td>
+              ))}
+            </tbody>
+          </table>
+          <div className="mb-6"> {/* Contenedor general para la gráfica */}
+            <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Asistencias de los Alumnos</h2>
 
-                    <td className="px-4 py-2 border-b">{a.porcentaje_final_asistencia}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Tabla de Resumen por Alumno */}
-          <h3 className="text-lg font-semibold text-blue-600 mb-4">Resumen General de Asistencias</h3>
-          <div className="mb-4 text-sm font-semibold text-gray-700">
-            <p>Total de Clases anual:</p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-300 bg-white shadow text-sm">
-              <thead className="bg-gray-100">
-                <tr className="text-center">
-                  <th className="px-4 py-2 border-b">#</th>
-                  <th className="px-4 py-2 border-b">Alumno</th>
-                  <th className="px-4 py-2 border-b">Total Asistencias</th>
-                  <th className="px-4 py-2 border-b">% Asistencia</th>
-                  <th className="px-4 py-2 border-b">acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {asistencias.map((a, index) => (
-                  <tr key={index} className="hover:bg-gray-50 text-center">
-                    <td className="px-4 py-2 border-b">{index + 1}</td>
-                    <td className="px-4 py-2 border-b">{a.alumno}</td>
-                    <td className="px-4 py-2 border-b">{a.total_clases}</td>
-                    <td className="px-4 py-2 border-b">{a.porcentaje_final_asistencia}%</td>
-                    <td className="px-4 py-2 border-b">
-                      <button className="text-blue-600 hover:underline">Ver</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <h3 className="text-lg font-semibold text-blue-600 mt-8">Comparación de Asistencias por Bimestre</h3>
-            <div className="text-sm text-gray-700 mb-4">
-              Total de alumnos: <span className="font-semibold">{asistencias.length}</span>
+            {/* Contenedor para la gráfica con borde y padding */}
+            <div className="bg-white p-4 shadow-md rounded-lg">
+              {/* Gráfica de barras */}
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="nombre" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="asistencias" fill="#28a745" />
+                  <Bar dataKey="faltas" fill="#FF0000" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={asistencias}>
-                <XAxis dataKey="alumno" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="periodo1" fill="#8884d8" name="1er Bim. %" />
-                <Bar dataKey="periodo2" fill="#82ca9d" name="2do Bim. %" />
-                <Bar dataKey="periodo3" fill="#ffc658" name="3er Bim. %" />
-                <Bar dataKey="periodo4" fill="#ff8042" name="4to Bim. %" /></BarChart>
-            </ResponsiveContainer>
           </div>
-        </>
+
+        </div>
+
       )}
     </div>
   );
 };
 
 export default AsistenciasMateriaProfesor;
+

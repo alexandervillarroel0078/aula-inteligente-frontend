@@ -64,8 +64,26 @@ export const obtenerParticipacionPorProfesorMateriaGrado = async (profesorId, ma
         throw error;
     }
 };
+// NUEVO: Obtener las asistencias de los alumnos por profesor, materia, grado y periodo
+// NUEVO: Obtener las asistencias de los alumnos por profesor, materia, grado y periodo
+export const obtenerAsistenciasPorProfesorMateriaGrado = async (profesorId, materiaId, gradoId, periodoId = null) => {
+  try {
+    // Construir la URL con los parámetros correctamente utilizando backticks
+    let url = `/api/asistencias/profesor/alumno?profesor_id=${profesorId}&materia_id=${materiaId}&grado_id=${gradoId}`;
+    
+    // Si periodoId está presente, agregarlo a la URL
+    if (periodoId) {
+      url += `&periodo_id=${periodoId}`;
+    }
 
-
+    // Realizar la solicitud GET para obtener las asistencias
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener las asistencias del profesor:", error);
+    throw error;
+  }
+};
 
 
 
