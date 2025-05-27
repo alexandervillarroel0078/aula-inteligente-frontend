@@ -23,6 +23,79 @@ export const obtenerMateriasDelProfesor = async (profesorId) => {
   }
 };
 
+export const obtenerNotasPorMateriaProfesorGrado = async (profesorId, materiaId, gradoId, periodoId = null) => {
+    try {
+        // Construir la URL con los parámetros
+        let url = `/api/notas/profesor?profesor_id=${profesorId}&materia_id=${materiaId}&grado_id=${gradoId}`;
+        
+        // Si se pasa un periodoId, agregarlo a la URL
+        if (periodoId) {
+            url += `&periodo_id=${periodoId}`;
+        }
+
+        // Hacer la solicitud GET a la API
+        const response = await api.get(url);
+
+        // Retornar los datos obtenidos de la API
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener las notas de los alumnos:", error);
+        throw error; // Lanza el error para que pueda ser manejado por quien llame a esta función
+    }
+};
+/*✅ profesor-->materia-->participacion*/
+export const obtenerParticipacionPorProfesorMateriaGrado = async (profesorId, materiaId, gradoId, periodoId = null) => {
+    try {
+        // Construir la URL con los parámetros
+        let url = `/api/participaciones/profesor?profesor_id=${profesorId}&materia_id=${materiaId}&grado_id=${gradoId}`;
+        
+        // Si se pasa un periodo_id, agregarlo a la URL
+        if (periodoId) {
+            url += `&periodo_id=${periodoId}`;
+        }
+
+        // Hacer la solicitud GET con la instancia 'api'
+        const response = await api.get(url);  // Cambié 'axios.get(url)' por 'api.get(url)'
+
+        // Retornar la respuesta
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener la participación del profesor:", error);
+        throw error;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const obtenerNotasPorMateria = async (materiaId) => {
   try {
     const response = await api.get(`/api/materias/${materiaId}/notas`);
@@ -64,6 +137,23 @@ export const registrarAsistenciasMateria = async (materiaId, payload) => {
         console.error('Error al registrar asistencia:', error);
         throw error;
     }
+};
+
+
+const API_URL = 'http://localhost:5000/api/materias/';
+
+// Función para obtener las notas finales de asistencia por materia
+export const obtenerNotasFinalAsistencia = async (materiaId) => {
+  try {
+    // Hacemos la solicitud GET al backend
+    const response = await axios.get(`${API_URL}${materiaId}/notasFinalAsistencia`);
+    
+    // Devolvemos los datos si la solicitud fue exitosa
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener las notas final asistencia:', error);
+    throw error;  // Puedes manejar el error de otra manera si lo deseas
+  }
 };
 
 

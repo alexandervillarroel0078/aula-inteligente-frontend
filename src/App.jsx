@@ -14,7 +14,6 @@ import ParticipacionListPage from './pages/ParticipacionListPage';
 import PrediccionListPage from './pages/PrediccionListPage';
 import TareaListPage from './pages/TareaListPage';
 import TareaEntregadaListPage from './pages/TareaEntregadaListPage';
-import ObservacionListPage from './pages/ObservacionListPage';
 import PeriodoListPage from './pages/PeriodoListPage';
 import RolListPage from './pages/RolListPage';
 import UsuarioListPage from './pages/UsuarioListPage';
@@ -36,6 +35,9 @@ import RegistroAsistenciaMateria from './pages/profesores/RegistroAsistenciaMate
 import RegistroNotasMateria from './pages/profesores/RegistroNotasMateria';
 import RegistroParticipacionMateria from './pages/profesores/RegistroParticipacionMateria';
 
+
+import Global from './pages/global';  // Asegúrate de que coincida el nombre
+
 function App() {
   return (
     <BrowserRouter>
@@ -53,7 +55,6 @@ function App() {
           <Route path="predicciones" element={<PrediccionListPage />} />
           <Route path="tareas" element={<TareaListPage />} />
           <Route path="tareas-entregadas" element={<TareaEntregadaListPage />} />
-          <Route path="observaciones" element={<ObservacionListPage />} />
           <Route path="periodos" element={<PeriodoListPage />} />
           <Route path="roles" element={<RolListPage />} />
           <Route path="usuarios" element={<UsuarioListPage />} />
@@ -74,8 +75,9 @@ function App() {
           <Route path="asistencia/:id" element={<AsistenciaDetalleEstudiante />} /> {/* Ruta correcta aquí */}
           <Route path="asistencia/:alumnoId/:materiaId/:periodoId" element={<AsistenciaDetalleEstudiante />} />
 
-        </Route>
+          <Route path="global" element={<Global />} />
 
+        </Route>
 
         {/* Rutas fuera del panel */}
         <Route path="/alumno/:alumnoId/materia/:materiaId/notas" element={<NotaMateriaEstudiante />} />

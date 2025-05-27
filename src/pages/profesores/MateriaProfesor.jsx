@@ -36,7 +36,9 @@ const MateriasProfesor = ({ profesorId }) => {
                                 <th className="px-4 py-2 border-b">Nombre</th>
                                 <th className="px-4 py-2 border-b">Turno</th>
                                 <th className="px-4 py-2 border-b">Aula</th>
+                                <th className="px-4 py-2 border-b">Grado</th>
                                 <th className="px-4 py-2 border-b">Estado</th>
+                                <th className="px-4 py-2 border-b">gestion</th>
                                 <th className="px-4 py-2 border-b">Acciones</th>
                             </tr>
                         </thead>
@@ -47,15 +49,29 @@ const MateriasProfesor = ({ profesorId }) => {
                                     <td className="px-4 py-2 border-b">{m.nombre}</td>
                                     <td className="px-4 py-2 border-b">{m.turno}</td>
                                     <td className="px-4 py-2 border-b">{m.aula}</td>
-                                    <td className="px-4 py-2 border-b">{m.estado}</td>
+                                    <td className="px-4 py-2 border-b">{m.grado_nombre}</td> {/* Se añadió el grado */}
+                                    <td className="px-4 py-2 border-b">
+                                        <span className={`px-2 py-1 text-xs rounded ${m.estado_asignacion === 'activo' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                            {m.estado_asignacion}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-2 border-b">{m.fecha_asignacion}</td> {/* Fecha de asignación */}
                                     <td className="px-4 py-2 border-b space-x-1">
                                         <button
-                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/notas`)}
-
+                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/notas?grado_id=${m.grado_id}`)}
                                             className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
                                         >
                                             Notas
                                         </button>
+
+
+
+                                        {/* <button
+                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/notas`)}
+                                            className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                                        >
+                                            Notas
+                                        </button> */}
                                         <button
                                             onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/asistencias`)}
                                             className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
@@ -64,21 +80,19 @@ const MateriasProfesor = ({ profesorId }) => {
                                         </button>
 
                                         <button
-                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/participaciones`)
-                                            }
+                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/participaciones?grado_id=${m.grado_id}`)}
                                             className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200"
                                         >
                                             Participaciones
                                         </button>
+
                                         <button
                                             onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/estudiantes`)}
                                             className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
                                         >
                                             Estudiantes
                                         </button>
-
                                     </td>
-
                                 </tr>
                             ))}
                         </tbody>

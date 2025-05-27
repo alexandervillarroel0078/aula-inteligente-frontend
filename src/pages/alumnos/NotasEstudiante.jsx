@@ -46,7 +46,9 @@ const NotasEstudiante = ({ alumnoId }) => {
                 <th className="px-4 py-2 border-b">Materia</th>
                 <th className="px-4 py-2 border-b">Periodo</th>
                 <th className="px-4 py-2 border-b">Tipo Parcial</th>
-                <th className="px-4 py-2 border-b">Nota Final</th>
+                <th className="px-4 py-2 border-b">gestion</th>
+                 <th className="px-4 py-2 border-b">grado</th>
+                <th className="px-4 py-2 border-b">Nota periodo</th>
                 <th className="px-4 py-2 border-b">observaciones</th>
                 <th className="px-4 py-2 border-b">Acciones</th>
               </tr>
@@ -58,7 +60,8 @@ const NotasEstudiante = ({ alumnoId }) => {
                   <td className="px-4 py-2 border-b">{n.materia_nombre}</td>
                   <td className="px-4 py-2 border-b">{n.periodo_nombre}</td>
                   <td className="px-4 py-2 border-b">{n.tipo_parcial}</td>
-                  <td className="px-4 py-2 border-b">{n.nota_final}</td>
+                  <td className="px-4 py-2 border-b">{n.anio}</td>
+                  <td className="px-4 py-2 border-b">{n.grado_nombre}</td>   <td className="px-4 py-2 border-b">{n.nota_periodo}</td>
                   <td className="px-4 py-2 border-b">{n.observaciones}</td>
                   <td className="px-4 py-2 border-b">
                     <button

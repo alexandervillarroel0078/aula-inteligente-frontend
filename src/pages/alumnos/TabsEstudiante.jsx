@@ -16,7 +16,6 @@ import ConfiguracionEstudiante from './ConfiguracionEstudiante';
 const TabsEstudiante = () => {
     const { id } = useParams();
     const [searchParams] = useSearchParams();
-    /*const [activeTab, setActiveTab] = useState('Perfil');*/
     const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'Perfil');
     const [alumno, setAlumno] = useState(null);
 
@@ -28,8 +27,8 @@ const TabsEstudiante = () => {
         'Predicción',
         'Historial',
         'Materias',
-        'Notificaciones',
-        'Configuración'
+        // 'Notificaciones',
+        // 'Configuración'
     ];
 
     useEffect(() => {
@@ -60,10 +59,10 @@ const TabsEstudiante = () => {
                 return <HistorialEstudiante alumnoId={alumno.id} />;
             case 'Materias':
                 return <MateriasEstudiante alumnoId={alumno.id} />;
-            case 'Notificaciones':
-                return <NotificacionesEstudiante />;
-            case 'Configuración':
-                return <ConfiguracionEstudiante />;
+            // case 'Notificaciones':
+            //     return <NotificacionesEstudiante />;
+            // case 'Configuración':
+            //     return <ConfiguracionEstudiante />;
             default:
                 return null;
         }
@@ -71,7 +70,6 @@ const TabsEstudiante = () => {
     };
 
     if (!alumno) return <p className="text-gray-500">Cargando estudiante...</p>;
-
     return (
         <div className="p-4">
             {/* Encabezado */}
@@ -79,7 +77,6 @@ const TabsEstudiante = () => {
                 <h2 className="text-2xl font-bold text-gray-800">{alumno.nombre_completo}</h2>
                 <p className="text-sm text-gray-500">Estudiante</p>
             </div>
-
             {/* Navegación de Tabs */}
             <div className="flex flex-wrap border-b border-gray-300 mb-4">
                 {tabs.map((tab) => (
@@ -95,7 +92,6 @@ const TabsEstudiante = () => {
                     </button>
                 ))}
             </div>
-
             {/* Contenido del Tab Activo */}
             <div className="bg-white border rounded shadow p-4">
                 {renderContent()}

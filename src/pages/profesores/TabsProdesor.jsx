@@ -14,15 +14,10 @@ const TabsProfesor = () => {
     const tabs = [
         'Perfil',
         'Materias',
-        /* 'Estudiantes',
-         'Notas',
-         'Asistencias',
-         'Participaciones',*/
         'Predicción',
         'Dashboard',
         'Configuración'
     ];
-
 
     useEffect(() => {
         const cargarProfesor = async () => {
@@ -39,18 +34,26 @@ const TabsProfesor = () => {
     const renderContent = () => {
         switch (activeTab) {
             case 'Perfil':
-                return <p>📋 Aquí se mostrará el perfil del profesor.</p>;
+                return (
+                    <div>
+                        {profesor ? (
+                            <div>
+                                <h2>{profesor.nombre_completo}</h2>
+                                <p><strong>CI:</strong> {profesor.ci}</p>
+                                <p><strong>Código:</strong> {profesor.codigo}</p>
+                                <p><strong>Email:</strong> {profesor.email}</p>
+                                <p><strong>Teléfono:</strong> {profesor.telefono}</p>
+                                <p><strong>Dirección:</strong> {profesor.direccion}</p>
+                                <p><strong>Estado:</strong> {profesor.estado}</p>
+                            </div>
+                        ) : (
+                            <p>Cargando datos del profesor...</p>
+                        )}
+                    </div>
+                );
             case 'Materias':
                 return <MateriasProfesor profesorId={profesor.id} />;
-          /*  case 'Estudiantes':
-                return <p>👥 Aquí se listarán los estudiantes por materia.</p>;
-            case 'Notas':
-                return <p>📝 Aquí se podrá registrar y ver notas.</p>;
-            case 'Asistencias':
-                return <p>✅ Aquí se podrá registrar y ver asistencias.</p>;
-            case 'Participaciones':
-                return <p>🎤 Aquí se registrarán participaciones por clase.</p>;
-           */ case 'Predicción':
+            case 'Predicción':
                 return <p>📈 Aquí se mostrarán predicciones de rendimiento académico.</p>;
             case 'Dashboard':
                 return <p>📊 Aquí se mostrará el resumen de estadísticas del profesor.</p>;

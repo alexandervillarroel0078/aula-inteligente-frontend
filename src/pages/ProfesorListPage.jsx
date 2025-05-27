@@ -4,35 +4,17 @@ import {
   obtenerProfesor,
   eliminarProfesor
 } from '../services/profesorService';
-
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
 const ProfesorListPage = () => {
   const navigate = useNavigate();
-
   const [profesores, setProfesores] = useState([]);
   const [cargando, setCargando] = useState(true);
-  
+
   const handleVer = (id) => {
-   navigate(`/panel/profesores/${id}/tabs`);
-
+    navigate(`/panel/profesores/${id}/tabs`);
   };
-
-/*
-  const handleEditar = async (id) => {
-    const profesor = await obtenerProfesor(id);
-    console.log("✏️ Editar profesor:", profesor);
-  };
-
-  const handleEliminar = async (id) => {
-    const confirmar = window.confirm("¿Deseas eliminar este profesor?");
-    if (!confirmar) return;
-
-    await eliminarProfesor(id);
-    setProfesores(prev => prev.filter(p => p.id !== id));
-    console.log("🗑️ Profesor eliminado:", id);
-  };*/
 
   useEffect(() => {
     const cargarProfesores = async () => {
@@ -102,19 +84,18 @@ const ProfesorListPage = () => {
                         <FaEye className="w-4 h-4" />
                       </button>
                       <button
-                      /*  onClick={() => handleEditar(p.id)}
                         className="p-1 rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600"
-                        title="Editar"*/
+                        title="Editar"
                       >
                         <FaEdit className="w-4 h-4" />
                       </button>
                       <button
-                        /*onClick={() => handleEliminar(p.id)}
                         className="p-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
-                        title="Eliminar"*/
+                        title="Eliminar"
                       >
                         <FaTrash className="w-4 h-4" />
                       </button>
+
                     </div>
                   </td>
 

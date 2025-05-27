@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { obtenerAsistenciasPorMateria } from '../../services/profesorService';
+import { obtenerAsistenciasPorMateria,obtenerNotasFinalAsistencia } from '../../services/profesorService';
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -14,13 +14,43 @@ const AsistenciasMateriaProfesor = () => {
   const totalPeriodo3 = asistencias.reduce((sum, a) => sum + (a.periodo3 || 0), 0);
   const totalPeriodo4 = asistencias.reduce((sum, a) => sum + (a.periodo4 || 0), 0);
   const totalGeneral = totalPeriodo1 + totalPeriodo2 + totalPeriodo3 + totalPeriodo4;
+  const [notas, setNotas] = useState([]);
+  const [error, setError] = useState(null);
 
+  const totalClasesPeriodo = {
+    periodo1: 35,
+    periodo2: 35,
+    periodo3: 35,
+    periodo4: 35,
+  };
+
+  const procesarAsistencias = (data) => {
+    return data.map((a) => {
+      const asistenciasPresentes =
+        (a.periodo1 || 0) +
+        (a.periodo2 || 0) +
+        (a.periodo3 || 0) +
+        (a.periodo4 || 0);
+
+      const porcentaje_final_asistencia =
+        a.total_clases > 0
+          ? Math.round((asistenciasPresentes / a.total_clases) * 100)
+          : 0;
+
+      return {
+        ...a,
+        asistenciasPresentes,
+        porcentaje_final_asistencia,
+      };
+    });
+  };
 
   useEffect(() => {
     const fetchAsistencias = async () => {
       try {
         const data = await obtenerAsistenciasPorMateria(materiaId);
-        setAsistencias(data);
+        const procesadas = procesarAsistencias(data);
+        setAsistencias(procesadas);
       } catch (error) {
         console.error('❌ Error al obtener asistencias:', error);
       } finally {
@@ -28,8 +58,9 @@ const AsistenciasMateriaProfesor = () => {
       }
     };
 
-    if (materiaId) fetchAsistencias(); // ✅ sin periodoId
+    if (materiaId) fetchAsistencias();
   }, [materiaId]);
+
 
   return (
     <div className="p-4">
@@ -40,9 +71,6 @@ const AsistenciasMateriaProfesor = () => {
       >
         ⬅️ Volver
       </button>
-
-
-
 
       {cargando ? (
         <p className="text-gray-500">Cargando asistencias...</p>
@@ -85,7 +113,8 @@ const AsistenciasMateriaProfesor = () => {
                   <th className="px-4 py-2 border-b">2do Bim.</th>
                   <th className="px-4 py-2 border-b">3er Bim.</th>
                   <th className="px-4 py-2 border-b">4to Bim.</th>
-                  <th className="px-4 py-2 border-b">Total Clases</th>
+                  <th className="px-4 py-2 border-b">Total asis. anual Clases</th>
+                  <th className="px-4 py-2 border-b">Nota final Asistencia</th>
                   <th className="px-4 py-2 border-b">% Asistencia</th>
                 </tr>
               </thead>
@@ -98,8 +127,10 @@ const AsistenciasMateriaProfesor = () => {
                     <td className="px-4 py-2 border-b">{a.periodo2}</td>
                     <td className="px-4 py-2 border-b">{a.periodo3}</td>
                     <td className="px-4 py-2 border-b">{a.periodo4}</td>
-                    <td className="px-4 py-2 border-b">{a.total_asistencias}</td>
-                    <td className="px-4 py-2 border-b">{a.porcentaje_asistencia}%</td>
+                    <td className="px-4 py-2 border-b">{a.total_clases}</td>
+                  <td className="px-4 py-2 border-b">{a.nota_final_asistencia}</td>
+
+                    <td className="px-4 py-2 border-b">{a.porcentaje_final_asistencia}%</td>
                   </tr>
                 ))}
               </tbody>
@@ -127,8 +158,8 @@ const AsistenciasMateriaProfesor = () => {
                   <tr key={index} className="hover:bg-gray-50 text-center">
                     <td className="px-4 py-2 border-b">{index + 1}</td>
                     <td className="px-4 py-2 border-b">{a.alumno}</td>
-                    <td className="px-4 py-2 border-b">{a.total_asistencias}</td>
-                    <td className="px-4 py-2 border-b">{a.porcentaje_asistencia}%</td>
+                    <td className="px-4 py-2 border-b">{a.total_clases}</td>
+                    <td className="px-4 py-2 border-b">{a.porcentaje_final_asistencia}%</td>
                     <td className="px-4 py-2 border-b">
                       <button className="text-blue-600 hover:underline">Ver</button>
                     </td>
@@ -146,11 +177,10 @@ const AsistenciasMateriaProfesor = () => {
                 <XAxis dataKey="alumno" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="porcentaje_periodo1" fill="#8884d8" name="1er Bim. %" />
-                <Bar dataKey="porcentaje_periodo2" fill="#82ca9d" name="2do Bim. %" />
-                <Bar dataKey="porcentaje_periodo3" fill="#ffc658" name="3er Bim. %" />
-                <Bar dataKey="porcentaje_periodo4" fill="#ff8042" name="4to Bim. %" />
-              </BarChart>
+                <Bar dataKey="periodo1" fill="#8884d8" name="1er Bim. %" />
+                <Bar dataKey="periodo2" fill="#82ca9d" name="2do Bim. %" />
+                <Bar dataKey="periodo3" fill="#ffc658" name="3er Bim. %" />
+                <Bar dataKey="periodo4" fill="#ff8042" name="4to Bim. %" /></BarChart>
             </ResponsiveContainer>
           </div>
         </>

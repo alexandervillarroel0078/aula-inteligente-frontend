@@ -7,7 +7,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -49,16 +53,24 @@ const Login = () => {
                 required
               />
             </div>
-            <div>
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full px-4 py-2 rounded-full border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            <div className="relative">
+        <input
+          type={showPassword ? 'text' : 'password'} // Cambia el tipo entre 'text' y 'password'
+          placeholder="Password"
+          className="w-full px-4 py-2 rounded-full border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute right-2 top-2 text-blue-500"
+        >
+          {showPassword ? 'Ocultar' : 'Ver'} {/* Cambia el texto del botón */}
+        </button>
+      </div>
+
             <div className="flex justify-between items-center text-sm text-gray-600">
               <label className="flex items-center">
                 <input type="checkbox" className="mr-2" /> Recuérdame
@@ -78,7 +90,7 @@ const Login = () => {
           )}
 
           <p className="text-sm text-center mt-4 text-gray-600">
-           ¿No tienes una cuenta?{" "}
+            ¿No tienes una cuenta?{" "}
             <button type="button" className="text-blue-600 font-semibold hover:underline">Solicitar acceso</button>
           </p>
         </div>

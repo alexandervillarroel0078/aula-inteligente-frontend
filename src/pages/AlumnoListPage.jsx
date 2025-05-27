@@ -8,11 +8,6 @@ import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 const AlumnoListPage = () => {
   const [alumnos, setAlumnos] = useState([]);
   const [cargando, setCargando] = useState(true);
-  /*
-  const handleVer = async (id) => {
-    const alumno = await verAlumno(id);
-    console.log("📋 Ver alumno:", alumno);
-  };*/
   const navigate = useNavigate();
 
 const handleVer = (id) => {
@@ -56,7 +51,7 @@ const handleVer = (id) => {
           onClick={() => console.log("Crear alumno")}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
         >
-          ➕ Nuevo Alumno
+          ➕ Nuevo Alumnovv
         </button>
       </div>
 

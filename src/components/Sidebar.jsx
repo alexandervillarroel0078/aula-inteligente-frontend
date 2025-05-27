@@ -43,7 +43,8 @@ const Sidebar = ({ isOpen, toggle }) => {
         { label: "Predicciones", icon: <FaChartLine />, path: "/panel/predicciones" },
         { label: "Tareas", icon: <FaClipboardList />, path: "/panel/tareas" },
         { label: "Tareas Entregadas", icon: <FaFileUpload />, path: "/panel/tareas-entregadas" },
-        { label: "Observaciones", icon: <FaStickyNote />, path: "/panel/observaciones" },
+       { label: "global", icon: <FaLayerGroup />, path: "/panel/global" },
+
         { label: "Periodos", icon: <FaCalendarAlt />, path: "/panel/periodos" },
 
         { label: "Roles", icon: <FaShieldAlt />, path: "/panel/roles" },
