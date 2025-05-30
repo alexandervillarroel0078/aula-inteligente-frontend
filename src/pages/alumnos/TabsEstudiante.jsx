@@ -10,8 +10,8 @@ import ParticipacionEstudiante from './ParticipacionEstudiante';
 import PrediccionEstudiante from './PrediccionEstudiante';
 import HistorialEstudiante from './HistorialEstudiante';
 import MateriasEstudiante from './MateriasEstudiante';
-import NotificacionesEstudiante from './NotificacionesEstudiante';
-import ConfiguracionEstudiante from './ConfiguracionEstudiante';
+
+
 
 const TabsEstudiante = () => {
     const { id } = useParams();
@@ -21,14 +21,12 @@ const TabsEstudiante = () => {
 
     const tabs = [
         'Perfil',
-        'Notas',
+        'Notas parciales',
         'Asistencias',
-        'Participación',
-        'Predicción',
+        'Participaciónes',
+        'Predicciónes',
         'Historial',
         'Materias',
-        // 'Notificaciones',
-        // 'Configuración'
     ];
 
     useEffect(() => {
@@ -47,22 +45,18 @@ const TabsEstudiante = () => {
         switch (activeTab) {
             case 'Perfil':
                 return <PerfilEstudiante alumnoId={alumno.id} />;
-            case 'Notas':
+            case 'Notas parciales':
                 return <NotasEstudiante alumnoId={alumno.id} />;
             case 'Asistencias':
                 return <AsistenciasEstudiante alumnoId={alumno.id} />;
-            case 'Participación':
+            case 'Participaciónes':
                 return <ParticipacionEstudiante alumnoId={alumno.id} />;
-            case 'Predicción':
+            case 'Predicciónes':
                 return <PrediccionEstudiante alumnoId={alumno.id} />;
             case 'Historial':
                 return <HistorialEstudiante alumnoId={alumno.id} />;
             case 'Materias':
                 return <MateriasEstudiante alumnoId={alumno.id} />;
-            // case 'Notificaciones':
-            //     return <NotificacionesEstudiante />;
-            // case 'Configuración':
-            //     return <ConfiguracionEstudiante />;
             default:
                 return null;
         }

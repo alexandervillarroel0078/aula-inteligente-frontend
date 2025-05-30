@@ -29,3 +29,16 @@ export const eliminarGrado = async (id) => {
   const response = await api.delete(`/api/grados/${id}`);
   return response.data;
 };
+
+// GET - Obtener materias de un grado por su ID
+export const obtenerMateriasPorGrado = async (gradoId) => {
+  try {
+    const response = await api.get(`/api/grado/materias?grado_id=${gradoId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener las materias del grado:", error);
+    throw error;
+  }
+};
+
+

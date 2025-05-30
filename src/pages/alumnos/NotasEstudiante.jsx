@@ -1,83 +1,102 @@
-import React, { useEffect, useState } from 'react';
-import { obtenerNotasAlumno } from '../../services/alumnoService';
-import { FaEye } from 'react-icons/fa';
+
+import React, { useEffect, useState } from "react";
+import { obtenerNotasAlumno } from "../../services/alumnoService"; // Ajusta tu import
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const NotasEstudiante = ({ alumnoId }) => {
-  const [notas, setNotas] = useState([]);
-  const [cargando, setCargando] = useState(true);
+  const [notasPorGestion, setNotasPorGestion] = useState({});
+  const [gestionSeleccionada, setGestionSeleccionada] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      setCargando(true);
-      const data = await obtenerNotasAlumno(alumnoId);  // Llamada a la API para obtener las notas
-      setNotas(data);
-      setCargando(false);
+    const fetchNotas = async () => {
+      try {
+        const data = await obtenerNotasAlumno(alumnoId);
+        setNotasPorGestion(data);
+      } catch (error) {
+        console.error("Error al obtener notas del alumno:", error);
+      }
     };
-    if (alumnoId) fetchData();  // Si hay un alumnoId, ejecutamos fetchData
-  }, [alumnoId]);  // Dependencia de alumnoId
 
-  // Calcular el promedio
-  const promedio = notas.length > 0
-    ? (notas.reduce((acc, curr) => acc + curr.nota, 0) / notas.length).toFixed(2)
-    : "0.00";
+    fetchNotas();
+  }, [alumnoId]);
 
-  // Función para ver detalles de la nota
-  const handleVer = (notaId) => {
-    alert(`Ver detalle de la nota ID: ${notaId}`);
-  };
+  const gestionesDisponibles = Object.keys(notasPorGestion);
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Notas</h2>
-      <p className="text-sm text-gray-600 mb-2">
-        Promedio general: <span className="font-semibold text-blue-600">{promedio}</span>
-      </p>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Notas Parciales del Estudiante</h1>
 
-      {cargando ? (
-        <p className="text-gray-500">Cargando notas...</p>
-      ) : notas.length === 0 ? (
-        <p className="text-gray-500">No hay notas registradas.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-300 bg-white shadow text-xs sm:text-sm">
-            <thead className="bg-gray-100">
-              <tr className="text-center">
-                <th className="px-4 py-2 border-b">#</th>
-                <th className="px-4 py-2 border-b">Materia</th>
-                <th className="px-4 py-2 border-b">Periodo</th>
-                <th className="px-4 py-2 border-b">Tipo Parcial</th>
-                <th className="px-4 py-2 border-b">gestion</th>
-                 <th className="px-4 py-2 border-b">grado</th>
-                <th className="px-4 py-2 border-b">Nota periodo</th>
-                <th className="px-4 py-2 border-b">observaciones</th>
-                <th className="px-4 py-2 border-b">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notas.map((n, index) => (
-                <tr key={n.id} className="hover:bg-gray-50 text-center">
-                  <td className="px-4 py-2 border-b">{index + 1}</td>
-                  <td className="px-4 py-2 border-b">{n.materia_nombre}</td>
-                  <td className="px-4 py-2 border-b">{n.periodo_nombre}</td>
-                  <td className="px-4 py-2 border-b">{n.tipo_parcial}</td>
-                  <td className="px-4 py-2 border-b">{n.anio}</td>
-                  <td className="px-4 py-2 border-b">{n.grado_nombre}</td>   <td className="px-4 py-2 border-b">{n.nota_periodo}</td>
-                  <td className="px-4 py-2 border-b">{n.observaciones}</td>
-                  <td className="px-4 py-2 border-b">
-                    <button
-                      onClick={() => handleVer(n.id)}
-                      className="p-1 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600"
-                      title="Ver"
-                    >
-                      <FaEye className="w-4 h-4" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Selector de gestión */}
+      {gestionesDisponibles.length > 0 && (
+        <div className="mb-4">
+          <label className="font-semibold mr-2">Seleccionar gestión:</label>
+          <select
+            className="border px-2 py-1 rounded"
+            value={gestionSeleccionada}
+            onChange={(e) => setGestionSeleccionada(e.target.value)}
+          >
+            <option value="">-- Todas --</option>
+            {gestionesDisponibles.map((gestion) => (
+              <option key={gestion} value={gestion}>
+                {gestion} ({notasPorGestion[gestion].estado})
+              </option>
+            ))}
+          </select>
         </div>
       )}
+
+      {/* Mostrar notas por gestión */}
+      {gestionesDisponibles
+  .filter(
+    (gestion) =>
+      gestionSeleccionada === "" || gestion === gestionSeleccionada
+  )
+  .map((gestion) => {
+    const datos = notasPorGestion[gestion];
+
+    return (
+      <div key={gestion} className="mb-6 border p-4 rounded shadow">
+        <h2 className="text-xl font-bold mb-2">
+          Gestión {gestion}{" "}
+          <span className="text-sm text-gray-500">({datos.estado})</span>
+        </h2>
+
+        {datos.notas.length > 0 ? (
+          <>
+            {/* Lista de notas */}
+            <ul className="list-disc pl-5 mb-4">
+              {datos.notas.map((nota, index) => (
+                <li key={index} className="mb-1">
+                  <strong>{nota.materia}:</strong> {nota.nota} (
+                  {nota.tipo_parcial}, {nota.periodo})
+                </li>
+              ))}
+            </ul>
+
+            {/* Gráfica de notas */}
+            <LineChart
+              width={500}
+              height={250}
+              data={datos.notas.map((nota) => ({
+                name: nota.periodo,
+                nota: nota.nota,
+              }))}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="nota" stroke="#8884d8" />
+            </LineChart>
+          </>
+        ) : (
+          <p className="text-gray-600 italic">Sin notas registradas.</p>
+        )}
+      </div>
+    );
+  })}
+
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import api from '../services/api';
 const Login = () => {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
@@ -15,12 +15,13 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/login", {
+      const respuesta = await api.post('/login', {
         correo: correo,
         password,
       });
 
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", respuesta.data.token);
+
       navigate("/panel");
 
     } catch (err) {
@@ -54,22 +55,22 @@ const Login = () => {
               />
             </div>
             <div className="relative">
-        <input
-          type={showPassword ? 'text' : 'password'} // Cambia el tipo entre 'text' y 'password'
-          placeholder="Password"
-          className="w-full px-4 py-2 rounded-full border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className="absolute right-2 top-2 text-blue-500"
-        >
-          {showPassword ? 'Ocultar' : 'Ver'} {/* Cambia el texto del botón */}
-        </button>
-      </div>
+              <input
+                type={showPassword ? 'text' : 'password'} // Cambia el tipo entre 'text' y 'password'
+                placeholder="Password"
+                className="w-full px-4 py-2 rounded-full border border-gray-300 bg-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-2 top-2 text-blue-500"
+              >
+                {showPassword ? 'Ocultar' : 'Ver'} {/* Cambia el texto del botón */}
+              </button>
+            </div>
 
             <div className="flex justify-between items-center text-sm text-gray-600">
               <label className="flex items-center">

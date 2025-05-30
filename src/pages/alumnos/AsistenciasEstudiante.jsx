@@ -1,200 +1,114 @@
-import React, { useState, useEffect } from "react";
-import { obtenerAsistenciasAlumno } from "../../services/alumnoService";  // Asegúrate de importar el servicio
-import { FaEye } from "react-icons/fa";  // Importar los íconos si es necesario
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";  // Importar Recharts
+import React, { useEffect, useState } from "react";
+import { obtenerAsistenciasAlumno } from "../../services/alumnoService";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const AsistenciasEstudiante = ({ alumnoId }) => {
-  const [asistencias, setAsistencias] = useState([]);  // Guardamos las asistencias obtenidas
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [asistenciasPorGestion, setAsistenciasPorGestion] = useState({});
+  const [gestionSeleccionada, setGestionSeleccionada] = useState("");
+  const [nombreAlumno, setNombreAlumno] = useState("");
 
-  // Cargar las asistencias al inicio cuando se monta el componente
   useEffect(() => {
-    const obtenerAsistencias = async () => {
-      setLoading(true);
+    const fetchAsistencias = async () => {
       try {
-        const data = await obtenerAsistenciasAlumno(alumnoId);  // Llamamos a la función para obtener asistencias
-        setAsistencias(data.asistencia_por_periodo);  // Guardamos los datos de asistencias
-      } catch (err) {
-        setError('Error al obtener las asistencias');
-        console.error(err);
-      } finally {
-        setLoading(false);
+        const data = await obtenerAsistenciasAlumno(alumnoId);
+        setAsistenciasPorGestion(data.asistencia_por_gestion || {});
+        setNombreAlumno(data.alumno_nombre || "");
+      } catch (error) {
+        console.error("Error al obtener asistencias:", error);
       }
     };
 
-    if (alumnoId) {
-      obtenerAsistencias();
-    }
+    fetchAsistencias();
   }, [alumnoId]);
 
-  // Mostrar estado de carga o error
-  if (loading) return <div>Cargando...</div>;
-  if (error) return <div>{error}</div>;
-
-  // Preparar datos para la gráfica
-  const asistenciaData = Object.entries(asistencias).map(([periodoId, periodoData]) => ({
-    nombre_periodo: periodoData.nombre_periodo,
-    puntaje: periodoData.puntaje,
-    total_asistencias: periodoData.total_asistencias,
-    total_faltas: periodoData.total_faltas,
-    porcentaje_asistencia: ((periodoData.total_asistencias / 40) * 100).toFixed(2),
-
-  }));
+  const gestionesDisponibles = Object.keys(asistenciasPorGestion);
 
   return (
-    <div>
-      <h2>Listado de Asistencias</h2>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Asistencias :  {nombreAlumno}</h1>
 
-      {/* Mostrar los datos de las asistencias */}
-      {Object.keys(asistencias).length === 0 ? (
-        <p>No hay registros de asistencias.</p>
-      ) : (
-        <>
-          {/* Tabla de asistencias */}
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm border bg-white shadow">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="border px-4 py-2">#</th>
-                  <th className="border px-4 py-2">Grado</th>
-                  <th className="border px-4 py-2">Periodo</th>
-                  <th className="border px-4 py-2">Puntaje</th>
-                  <th className="border px-4 py-2">Total Asistencias</th>
-                  <th className="border px-4 py-2">Total Clases</th>
-                  <th className="border px-4 py-2">Total Faltas</th>
-                  {/* <th className="border px-4 py-2">Porcentaje de Asistencia</th>   */}
-                  <th className="border px-4 py-2">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(asistencias).map(([periodoId, periodoData], index) => (
-                  <tr key={periodoId} className="hover:bg-gray-50">
-                    <td className="border px-4 py-2">{index + 1}</td>
-                    <td className="border px-4 py-2">{periodoData.nombre_grado}</td>
-                    <td className="border px-4 py-2">{periodoData.nombre_periodo}</td>
-                    <td className="border px-4 py-2">{periodoData.puntaje}</td>
-                    <td className="border px-4 py-2">{periodoData.total_asistencias}</td>
-                    <td className="border px-4 py-2">{periodoData.total_clases}</td>
-                    <td className="border px-4 py-2">{periodoData.total_faltas}</td>
-                    {/* <td className="border px-4 py-2">{periodoData.porcentaje_asistencia}%</td> */}
-                    <td className="px-4 py-2 border-b text-center">
-                      <button className="text-blue-600 hover:text-blue-800 border-b-2 border-transparent hover:border-blue-600">
-                        <FaEye /> Ver
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Gráfica de barras para mostrar la asistencia por periodo */}
-          <h3 className="text-lg font-semibold mt-6">Gráfica de Asistencia por Periodo</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={asistenciaData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="nombre_periodo" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="total_asistencias" fill="#22c55e" />
-              <Bar dataKey="total_faltas" fill="#ef4444" />
-            </BarChart>
-          </ResponsiveContainer>
-        </>
+      {/* Selector de gestión */}
+      {gestionesDisponibles.length > 0 && (
+        <div className="mb-4">
+          <label className="font-semibold mr-2">Seleccionar gestión:</label>
+          <select
+            className="border px-2 py-1 rounded"
+            value={gestionSeleccionada}
+            onChange={(e) => setGestionSeleccionada(e.target.value)}
+          >
+            <option value="">-- Todas --</option>
+            {gestionesDisponibles.map((gestion) => (
+              <option key={gestion} value={gestion}>
+                {gestion} ({asistenciasPorGestion[gestion].estado})
+              </option>
+            ))}
+          </select>
+        </div>
       )}
+
+      {/* Mostrar asistencias por gestión */}
+      {gestionesDisponibles
+        .filter(
+          (gestion) =>
+            gestionSeleccionada === "" || gestion === gestionSeleccionada
+        )
+        .map((gestion) => {
+          const datos = asistenciasPorGestion[gestion];
+          return (
+            <div key={gestion} className="mb-6 border p-4 rounded shadow">
+              <h2 className="text-xl font-bold mb-2">
+                Gestión {gestion}{" "}
+                <span className="text-sm text-gray-500">({datos.estado})</span>
+                <span className="text-blue-500 underline cursor-pointer">Ver</span>
+              </h2>
+
+              {datos.asistencias.length > 0 ? (
+                <>
+                  <ul className="list-disc pl-5 mb-4">
+                    {datos.asistencias.map((asistencia, index) => (
+                      <li key={index} className="mb-2">
+                        <strong>{asistencia.nombre_grado}</strong> –{" "}
+                        {asistencia.nombre_periodo}:<br />
+                        ✅ Asistencias: {asistencia.total_asistencias} /{" "}
+                        {asistencia.total_clases} clases |
+                        ❌ Faltas: {asistencia.total_faltas} | 🎯 Puntaje:{" "}
+                        {asistencia.puntaje}%
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Gráfica de puntaje de asistencia */}
+                  <LineChart
+                    width={500}
+                    height={250}
+                    data={datos.asistencias.map((a) => ({
+                      name: a.nombre_periodo,
+                      puntaje: a.puntaje,
+                    }))}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis domain={[0, 40]} />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="puntaje"
+                      stroke="#82ca9d"
+                      name="Asistencia (%)"
+                    />
+                  </LineChart>
+                </>
+              ) : (
+                <p className="text-gray-600 italic">
+                  Sin asistencias registradas en esta gestión.
+                </p>
+              )}
+            </div>
+          );
+        })}
     </div>
   );
 };
 
 export default AsistenciasEstudiante;
-
-
-// import React, { useEffect, useState } from "react";
-// import { obtenerAsistenciasAlumno } from "../../services/alumnoService";  // Importar el servicio
-// import { FaEye, FaEdit, FaTrash } from "react-icons/fa";  // Importar los íconos si es necesario
-
-// const AsistenciasEstudiante = ({ alumnoId, gradoId }) => {  // Asegúrate de recibir 'gradoId' como prop
-//   const [asistencias, setAsistencias] = useState([]);  // Guardamos las asistencias obtenidas
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-
-//   // Cargar las asistencias al inicio cuando se monta el componente
-//   useEffect(() => {
-//     const obtenerAsistencias = async () => {
-//       setLoading(true);
-//       try {
-//         if (alumnoId && gradoId) {  // Verificar que 'gradoId' esté presente
-//           const data = await obtenerAsistenciasAlumno(alumnoId, gradoId);  // Llamamos a la función para obtener asistencias
-//           setAsistencias(data.asistencia_por_periodo);  // Guardamos los datos de asistencias
-//         } else {
-//           setError("El grado no es válido.");
-//         }
-//       } catch (err) {
-//         setError('Error al obtener las asistencias');
-//         console.error(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     if (alumnoId && gradoId) {
-//       obtenerAsistencias();
-//     }
-//   }, [alumnoId, gradoId]);  // Dependencias para reejecutar si 'alumnoId' o 'gradoId' cambian
-
-//   // Mostrar estado de carga o error
-//   if (loading) return <div>Cargando...</div>;
-//   if (error) return <div>{error}</div>;
-
-//   return (
-//     <div>
-//       <h2>Listado de Asistencias</h2>
-
-//       {/* Mostrar los datos de las asistencias */}
-//       {asistencias.length === 0 ? (
-//         <p>No hay registros.</p>
-//       ) : (
-//         <table className="min-w-full text-sm border bg-white shadow">
-//           <thead className="bg-gray-100">
-//             <tr>
-//               <th className="border px-4 py-2">#</th>
-//               <th className="border px-4 py-2">Nombre</th>
-//               <th className="border px-4 py-2">Grado</th>
-//               <th className="border px-4 py-2">Materia</th>
-//               <th className="border px-4 py-2">Periodo</th>
-//               <th className="border px-4 py-2">Tipo</th>
-//               <th className="border px-4 py-2">Acciones</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {asistencias.map((item, index) => (
-//               <tr key={item.id} className="hover:bg-gray-50">
-//                 <td className="border px-4 py-2">{index + 1}</td>
-//                 <td className="border px-4 py-2">{item.alumno_nombre}</td>
-//                 <td className="border px-4 py-2">{item.grado_nombre}</td>
-//                 <td className="border px-4 py-2">{item.materia_nombre}</td>
-//                 <td className="border px-4 py-2">{item.periodo_nombre}</td>
-//                 <td className="border px-4 py-2">{item.tipo}</td>
-//                 <td className="px-4 py-2 border-b text-center">
-//                   <button className="text-blue-600 hover:text-blue-800 border-b-2 border-transparent hover:border-blue-600">
-//                     <FaEye /> Ver
-//                   </button>
-//                   <button className="text-yellow-600 hover:text-yellow-800 ml-2">
-//                     <FaEdit /> Editar
-//                   </button>
-//                   <button className="text-red-600 hover:text-red-800 ml-2">
-//                     <FaTrash /> Eliminar
-//                   </button>
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default AsistenciasEstudiante;

@@ -5,16 +5,9 @@ import {
   FaHome, FaUsers, FaUserShield, FaUserTie, FaBuilding, FaBookOpen, FaSignOutAlt, FaChevronDown, FaChevronRight
 } from "react-icons/fa";
 import { FaShieldAlt } from 'react-icons/fa';
-import { FaChartLine } from "react-icons/fa";
 import { FaClipboardList } from "react-icons/fa";
-import { FaFileUpload } from "react-icons/fa";
-import { FaStickyNote } from "react-icons/fa";
 import { FaCalendarAlt } from 'react-icons/fa';
-import { FaChalkboardTeacher } from 'react-icons/fa';
 import { FaLayerGroup } from 'react-icons/fa';
-
-
-
 
 const Sidebar = ({ isOpen, toggle }) => {
 
@@ -34,37 +27,21 @@ const Sidebar = ({ isOpen, toggle }) => {
       section: "INICIO",
       links: [
         { label: "Inicio", icon: <FaHome />, path: "/panel/" },
-        { label: "Alumnos", icon: <FaUsers />, path: "/panel/alumnos" },
-        { label: "Profesores", icon: <FaUserTie />, path: "/panel/profesores" }
-        , { label: "Materias", icon: <FaBookOpen />, path: "/panel/materias" }
-        , { label: "Notas", icon: <FaBookOpen />, path: "/panel/notas" }
-        , { label: "Asistencias", icon: <FaBookOpen />, path: "/panel/asistencias" },
-        { label: "Participaciones", icon: <FaUserShield />, path: "/panel/participaciones" },
-        { label: "Predicciones", icon: <FaChartLine />, path: "/panel/predicciones" },
-        { label: "Tareas", icon: <FaClipboardList />, path: "/panel/tareas" },
-        { label: "Tareas Entregadas", icon: <FaFileUpload />, path: "/panel/tareas-entregadas" },
-       { label: "global", icon: <FaLayerGroup />, path: "/panel/global" },
 
+        // Módulo Académico
+        { label: "Alumnos", icon: <FaUsers />, path: "/panel/alumnos" },
+        { label: "Profesores", icon: <FaUserTie />, path: "/panel/profesores" },
+        { label: "Materias", icon: <FaBookOpen />, path: "/panel/materias" },
+        { label: "Grados", icon: <FaLayerGroup />, path: "/panel/grados" },
         { label: "Periodos", icon: <FaCalendarAlt />, path: "/panel/periodos" },
 
-        { label: "Roles", icon: <FaShieldAlt />, path: "/panel/roles" },
-
+        // Administración
         { label: "Usuarios", icon: <FaUserShield />, path: "/panel/usuarios" },
+        { label: "Roles", icon: <FaShieldAlt />, path: "/panel/roles" },
+        { label: "Bitácora", icon: <FaClipboardList />, path: "/panel/bitacoras" },
 
-        { label: "Asignaciones", icon: <FaChalkboardTeacher />, path: "/panel/asignaciones" }
-
-        ,
-
-        { label: "Grados", icon: <FaLayerGroup />, path: "/panel/grados" }
-
-        ,
-
-        { label: "Bitácora", icon: <FaClipboardList />, path: "/panel/bitacoras" }
-
-
-
-
-
+        // Otros
+        { label: "global", icon: <FaLayerGroup />, path: "/panel/global" }
       ]
     },
     {

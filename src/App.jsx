@@ -1,42 +1,37 @@
-// ✅ App.jsx Corregido (rutas absolutas fuera de /panel)
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import Login from './pages/Login';
 import DashboardLayout from './layout/DashboardLayout';
 import Panel from './pages/Panel';
 
+// Globales
+import Global from './pages/global';
+
+// Administración
 import AlumnoListPage from './pages/AlumnoListPage';
 import ProfesorListPage from './pages/ProfesorListPage';
 import MateriaListPage from './pages/MateriaListPage';
-import NotaListPage from './pages/NotaListPage';
-import AsistenciaListPage from './pages/AsistenciaListPage';
-import ParticipacionListPage from './pages/ParticipacionListPage';
-import PrediccionListPage from './pages/PrediccionListPage';
-import TareaListPage from './pages/TareaListPage';
-import TareaEntregadaListPage from './pages/TareaEntregadaListPage';
 import PeriodoListPage from './pages/PeriodoListPage';
 import RolListPage from './pages/RolListPage';
 import UsuarioListPage from './pages/UsuarioListPage';
-import MateriaProfesorListPage from './pages/MateriaProfesorListPage';
 import GradoListPage from './pages/GradoListPage';
 import BitacoraListPage from './pages/BitacoraListPage';
 
+// Alumnos
 import TabsEstudiante from './pages/alumnos/TabsEstudiante';
-import NotaMateriaEstudiante from './pages/alumnos/NotaMateriaEstudiante';
-import AsistenciaMateriaEstudiante from './pages/alumnos/AsistenciaMateriaEstudiante';
-import AsistenciaDetalleEstudiante from './pages/alumnos/AsistenciaDetalleEstudiante';
 
+// Profesores - Tabs y vistas por materia
 import TabsProfesor from './pages/profesores/TabsProdesor';
 import NotasMateriaProfesor from './pages/profesores/NotasMateriaProfesor';
 import AsistenciasMateriaProfesor from './pages/profesores/AsistenciasMateriaProfesor';
 import ParticipacionesMateriaProfesor from './pages/profesores/ParticipacionesMateriaProfesor';
 import EstudiantesMateriaProfesor from './pages/profesores/EstudiantesMateriaProfesor';
+
+// Profesores - Registro
 import RegistroAsistenciaMateria from './pages/profesores/RegistroAsistenciaMateria';
 import RegistroNotasMateria from './pages/profesores/RegistroNotasMateria';
 import RegistroParticipacionMateria from './pages/profesores/RegistroParticipacionMateria';
-
-
-import Global from './pages/global';  // Asegúrate de que coincida el nombre
 
 function App() {
   return (
@@ -46,48 +41,37 @@ function App() {
 
         <Route path="/panel" element={<DashboardLayout />}>
           <Route index element={<Panel />} />
+
+          {/* Administración */}
           <Route path="alumnos" element={<AlumnoListPage />} />
           <Route path="profesores" element={<ProfesorListPage />} />
           <Route path="materias" element={<MateriaListPage />} />
-          <Route path="notas" element={<NotaListPage />} />
-          <Route path="asistencias" element={<AsistenciaListPage />} />
-          <Route path="participaciones" element={<ParticipacionListPage />} />
-          <Route path="predicciones" element={<PrediccionListPage />} />
-          <Route path="tareas" element={<TareaListPage />} />
-          <Route path="tareas-entregadas" element={<TareaEntregadaListPage />} />
           <Route path="periodos" element={<PeriodoListPage />} />
           <Route path="roles" element={<RolListPage />} />
           <Route path="usuarios" element={<UsuarioListPage />} />
-          <Route path="asignaciones" element={<MateriaProfesorListPage />} />
           <Route path="grados" element={<GradoListPage />} />
           <Route path="bitacoras" element={<BitacoraListPage />} />
+
+          {/* Alumnos */}
           <Route path="alumnos/:id/tabs" element={<TabsEstudiante />} />
-          {/* Profesores */}
+
+          {/* Profesores - Tabs */}
           <Route path="profesores/:id/tabs" element={<TabsProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/notas" element={<NotasMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/asistencias" element={<AsistenciasMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/participaciones" element={<ParticipacionesMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/estudiantes" element={<EstudiantesMateriaProfesor />} />
+
+          {/* Profesores - Registro */}
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/asistencias/nueva" element={<RegistroAsistenciaMateria />} />
-          {/* <Route path="/panel/profesores/:profesorId/materias/:materiaId/notas/nueva" element={<RegistroNotasMateria />} /> */}
           <Route path="/panel/profesor/registro-asistencia" element={<RegistroAsistenciaMateria />} />
           <Route path="/panel/profesor/registro-participacion" element={<RegistroParticipacionMateria />} />
           <Route path="/panel/profesor/registro-notas" element={<RegistroNotasMateria />} />
-
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/participaciones/nueva" element={<RegistroParticipacionMateria />} />
 
-          <Route path="asistencia/:id" element={<AsistenciaDetalleEstudiante />} /> {/* Ruta correcta aquí */}
-          <Route path="asistencia/:alumnoId/:materiaId/:periodoId" element={<AsistenciaDetalleEstudiante />} />
-
+          {/* Global */}
           <Route path="global" element={<Global />} />
-
         </Route>
-
-        {/* Rutas fuera del panel */}
-        <Route path="/alumno/:alumnoId/materia/:materiaId/notas" element={<NotaMateriaEstudiante />} />
-        <Route path="/alumno/:alumnoId/materia/:materiaId/asistencias" element={<AsistenciaMateriaEstudiante />} />
-
-
       </Routes>
     </BrowserRouter>
   );

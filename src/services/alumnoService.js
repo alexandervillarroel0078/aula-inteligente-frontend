@@ -31,7 +31,7 @@ export const obtenerPerfilAlumno = async (id) => {
   const response = await api.get(`/api/alumnos/${id}/perfil`);
   return response.data;
 };
-
+// 🟢 Funciones del Alumno
 export const obtenerNotasAlumno = async (id) => {
   const response = await api.get(`/api/alumnos/${id}/notas`);
   return response.data;
@@ -62,6 +62,15 @@ export const obtenerParticipacionAlumno = async (alumnoId) => {
 };
 
 
+
+ 
+
+export const obtenerHistorialAlumno = async (id) => {
+  const response = await api.get(`/api/alumnos/${id}/historial`);
+  return response.data;
+};
+
+
 // Función para obtener las materias de un alumno por su ID
 export const obtenerMateriasAlumno = async (alumnoId) => {
   try {
@@ -75,40 +84,5 @@ export const obtenerMateriasAlumno = async (alumnoId) => {
     console.error("Error al obtener las materias del alumno:", error);
     throw error;
   }
-};
-
-export const obtenerPrediccionesAlumno = async (id) => {
-  const response = await api.get(`/api/alumnos/${id}/predicciones`);
-  return response.data;
-};
-
-export const obtenerHistorialAlumno = async (id) => {
-  const response = await api.get(`/api/alumnos/${id}/historial`);
-  return response.data;
-};
-
-
-// 🟢 Obtener nota por alumno y materia
-export const obtenerNotasPorMateria = async (alumnoId, materiaId) => {
-  const response = await api.get(`/api/alumnos/${alumnoId}/materias/${materiaId}/notas`);
-  return response.data;
-};
-
-// 🟢 Obtener asistencias por alumno y materia
-export const obtenerAsistenciasPorMateria = async (alumnoId, materiaId) => {
-  const response = await api.get(`/api/alumnos/${alumnoId}/materias/${materiaId}/asistencias`);
-  return response.data;
-};
-
-// 🟢 Obtener asistencia total por alumno, materia y periodo
-export const obtenerAsistenciaTotal = async (alumnoId, materiaId, periodoId) => {
-  const response = await api.get(`/api/alumnos/${alumnoId}/materias/${materiaId}/periodos/${periodoId}/asistencia`);
-  return response.data;
-};
-
-// Servicio para obtener el detalle de la asistencia
-export const obtenerDetalleAsistencia = async (alumnoId, materiaId, periodoId) => {
-  const response = await api.get(`/api/alumnos/${alumnoId}/materias/${materiaId}/periodos/${periodoId}/asistencia/detalle`);
-  return response.data;
 };
 
