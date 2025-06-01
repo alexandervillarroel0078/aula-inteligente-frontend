@@ -1,10 +1,24 @@
 import api from './api';
 
-// GET - Listar todos los grados
-export const listarGrados = async () => {
-  const response = await api.get('/api/grados');
+// GET - Listar grados por gestión específica
+export const listarGradosAgrupados = async () => {
+  const response = await api.get('/api/grados/agrupados');
   return response.data;
 };
+
+
+
+const API_URL = 'http://localhost:5000/api/grados';
+
+export const obtenerMateriasPorGrado = async (gestionId, gradoId) => {
+  const response = await fetch(`${API_URL}/gestion/${gestionId}/grado/${gradoId}/materias`);
+  if (!response.ok) {
+    throw new Error('Error al obtener materias');
+  }
+  return await response.json();
+};
+
+
 
 // GET - Ver un grado por ID
 export const verGrado = async (id) => {
@@ -30,15 +44,15 @@ export const eliminarGrado = async (id) => {
   return response.data;
 };
 
-// GET - Obtener materias de un grado por su ID
-export const obtenerMateriasPorGrado = async (gradoId) => {
-  try {
-    const response = await api.get(`/api/grado/materias?grado_id=${gradoId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error al obtener las materias del grado:", error);
-    throw error;
-  }
-};
+// // GET - Obtener materias de un grado por su ID
+// export const obtenerMateriasPorGrado = async (gradoId) => {
+//   try {
+//     const response = await api.get(`/api/grado/materias?grado_id=${gradoId}`);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error al obtener las materias del grado:", error);
+//     throw error;
+//   }
+// };
 
 

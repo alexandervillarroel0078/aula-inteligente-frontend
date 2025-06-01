@@ -10,9 +10,9 @@ const AlumnoListPage = () => {
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
 
-const handleVer = (id) => {
-  navigate(`/panel/alumnos/${id}/tabs`);
-};
+  const handleVer = (id) => {
+    navigate(`/panel/alumnos/${id}/tabs`);
+  };
   const handleEditar = async (id) => {
     const alumno = await verAlumno(id);
     console.log("✏️ Editar alumno:", alumno);
@@ -66,13 +66,8 @@ const handleVer = (id) => {
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-4 py-2 border-b">#</th>
-                <th className="px-4 py-2 border-b">Código</th>
                 <th className="px-4 py-2 border-b">Nombre</th>
-                <th className="px-4 py-2 border-b">Género</th>
-                <th className="px-4 py-2 border-b">Grado</th>
-                <th className="px-4 py-2 border-b hidden md:table-cell">Correo</th>
-                <th className="px-4 py-2 border-b hidden md:table-cell">Teléfono</th>
-                <th className="px-4 py-2 border-b">Estado</th>
+                <th className="px-4 py-2 border-b">apellido</th>
                 <th className="px-4 py-2 border-b text-center">Acciones</th>
 
               </tr>
@@ -80,14 +75,9 @@ const handleVer = (id) => {
             <tbody>
               {alumnos.map((alumno, index) => (
                 <tr key={alumno.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border-b">{index + 1}</td>
-                  <td className="px-4 py-2 border-b">{alumno.codigo}</td>
-                  <td className="px-4 py-2 border-b">{alumno.nombre_completo}</td>
-                  <td className="px-4 py-2 border-b">{alumno.genero}</td>
-                  <td className="px-4 py-2 border-b">{alumno.grado?.nombre || '-'}</td>
-                  <td className="px-4 py-2 border-b hidden md:table-cell">{alumno.email}</td>
-                  <td className="px-4 py-2 border-b hidden md:table-cell">{alumno.telefono}</td>
-                  <td className="px-4 py-2 border-b">{alumno.estado}</td>
+                  <td className="px-4 py-2 border-b">{alumno.id}</td>
+                  <td className="px-4 py-2 border-b">{alumno.nombre}</td>
+                  <td className="px-4 py-2 border-b">{alumno.apellido}</td>
                   <td className="px-4 py-2 border-b text-center">
                     <div className="flex justify-center gap-2">
                       <button
@@ -97,7 +87,7 @@ const handleVer = (id) => {
                       >
                         <FaEye className="w-4 h-4" />
                       </button>
-                      <button
+                      {/* <button
                         onClick={() => handleEditar(alumno.id)}
                         className="p-1 rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600"
                         title="Editar"
@@ -110,7 +100,7 @@ const handleVer = (id) => {
                         title="Eliminar"
                       >
                         <FaTrash className="w-4 h-4" />
-                      </button>
+                      </button> */}
                     </div>
                   </td>
 

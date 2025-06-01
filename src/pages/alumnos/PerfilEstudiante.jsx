@@ -31,9 +31,9 @@ const PerfilEstudiante = ({ alumnoId }) => {
     <div className="text-sm sm:text-base text-gray-800 space-y-2">
       <h3 className="text-xl font-bold text-blue-700 mb-4">Perfil del Estudiante</h3>
       <p><strong>Código:</strong> {perfil.codigo}</p>
-      <p><strong>Nombre completo:</strong> {perfil.nombre_completo}</p>
+      <p><strong>Nombre completo:</strong> {perfil.nombre}</p>
       <p><strong>Género:</strong> {perfil.genero}</p>
-      <p><strong>Fecha de nacimiento:</strong> {perfil.fecha_nacimiento}</p>
+      <p><strong>Fecha de nacimiento:</strong> {perfil.apellido}</p>
       <p><strong>Correo electrónico:</strong> {perfil.email}</p>
       <p><strong>Teléfono:</strong> {perfil.telefono}</p>
       <p><strong>Dirección:</strong> {perfil.direccion}</p>

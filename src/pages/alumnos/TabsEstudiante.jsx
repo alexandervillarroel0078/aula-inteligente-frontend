@@ -68,7 +68,7 @@ const TabsEstudiante = () => {
         <div className="p-4">
             {/* Encabezado */}
             <div className="mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">{alumno.nombre_completo}</h2>
+                <h2 className="text-2xl font-bold text-gray-800">{alumno.nombre}</h2>
                 <p className="text-sm text-gray-500">Estudiante</p>
             </div>
             {/* Navegación de Tabs */}

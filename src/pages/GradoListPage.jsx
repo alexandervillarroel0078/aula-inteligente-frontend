@@ -1,75 +1,92 @@
-import React, { useEffect, useState } from "react";
-import axios from "../services/api";
+import React, { useEffect, useState } from 'react';
+import { listarGradosAgrupados } from '../services/gradoService';
+import { useNavigate } from 'react-router-dom';
+
+import '../components/main.css';
 
 const GradoListPage = () => {
-  const [datos, setDatos] = useState([]);
+  const [gestiones, setGestiones] = useState([]);
   const [gestionSeleccionada, setGestionSeleccionada] = useState(null);
-  const [gestionesDisponibles, setGestionesDisponibles] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const cargar = async () => {
+    const cargarDatos = async () => {
       try {
-        const res = await axios.get("/api/materias");
-        setDatos(res.data);
-        setGestionesDisponibles(res.data.map((g) => g.gestion));
+        const data = await listarGradosAgrupados();
+        setGestiones(data);
+        if (data.length > 0) {
+          setGestionSeleccionada(data[0].gestion_id); // Mostrar la primera gestión por defecto
+        }
       } catch (error) {
-        console.error("Error al cargar datos:", error);
+        setError('Error al cargar las gestiones');
+      } finally {
+        setCargando(false);
       }
     };
-    cargar();
+
+    cargarDatos();
   }, []);
 
-  const gestionActiva = datos.find((g) => g.gestion === Number(gestionSeleccionada));
+  const gestionActiva = gestiones.find(g => g.gestion_id === gestionSeleccionada);
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Grados y Materias por Gestión</h2>
+    <div>
+      <h2>Lista de Grados</h2>
 
-      <div className="mb-4">
-        <label className="block mb-1 font-medium">Selecciona una Gestión:</label>
-        <select
-          className="border p-2 rounded w-full md:w-1/3"
-          onChange={(e) => setGestionSeleccionada(e.target.value)}
-          value={gestionSeleccionada || ""}
-        >
-          <option value="">-- Selecciona una gestión --</option>
-          {gestionesDisponibles.map((anio) => (
-            <option key={anio} value={anio}>
-              {anio}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* Selector de gestión */}
+      <label>Selecciona una gestión: </label>
+      <select
+        value={gestionSeleccionada || ''}
+        onChange={(e) => setGestionSeleccionada(parseInt(e.target.value))}
+      >
+        {gestiones.map((g) => (
+          <option key={g.gestion_id} value={g.gestion_id}>
+            {g.nombre_gestion} - {g.gestion_estado}
+          </option>
+        ))}
+      </select>
 
-      {gestionActiva && (
-        <div className="mt-6">
-          <h3 className="text-xl font-semibold text-blue-700 mb-2">
-            Gestión {gestionActiva.gestion} ({gestionActiva.estado})
-          </h3>
+      <br /><br />
 
-          {gestionActiva.grados.length === 0 ? (
-            <p className="text-gray-500 ml-4">Sin grados registrados.</p>
-          ) : (
-            <ul className="ml-4 list-disc">
+      {cargando ? (
+        <p>Cargando grados...</p>
+      ) : error ? (
+        <p>{error}</p>
+      ) : gestionActiva ? (
+        <div className="responsive-table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
               {gestionActiva.grados.map((grado) => (
-                <li key={grado.id} className="mb-2">
-                  <strong>{grado.nombre}</strong>
-                  <ul className="ml-6 list-square text-gray-800">
-                    {grado.materias.length > 0 ? (
-                      grado.materias.map((m) => (
-                        <li key={m.id}>
-                          {m.nombre} ({m.codigo}) – Aula {m.aula} [{m.turno}]
-                        </li>
-                      ))
-                    ) : (
-                      <li className="text-gray-500">Sin materias</li>
-                    )}
-                  </ul>
-                </li>
+                <tr key={grado.grado_id}>
+                  <td>{grado.grado_id}</td>
+                  <td>{grado.nombre_grado}</td>
+                  <td>{grado.descripcion_grado}</td>
+                  <td>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => navigate(`/panel/materias?gestion=${gestionSeleccionada}&grado=${grado.grado_id}`)}
+                    >
+                      Ver
+                    </button>
+
+                  </td>
+                </tr>
               ))}
-            </ul>
-          )}
+            </tbody>
+          </table>
         </div>
+      ) : (
+        <p>No hay grados para esta gestión.</p>
       )}
     </div>
   );

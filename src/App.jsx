@@ -1,4 +1,6 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Login from './pages/Login';
@@ -11,7 +13,7 @@ import Global from './pages/global';
 // Administración
 import AlumnoListPage from './pages/AlumnoListPage';
 import ProfesorListPage from './pages/ProfesorListPage';
-import MateriaListPage from './pages/MateriaListPage';
+import MateriaGrado from './pages/MateriaGrado';
 import PeriodoListPage from './pages/PeriodoListPage';
 import RolListPage from './pages/RolListPage';
 import UsuarioListPage from './pages/UsuarioListPage';
@@ -33,6 +35,7 @@ import RegistroAsistenciaMateria from './pages/profesores/RegistroAsistenciaMate
 import RegistroNotasMateria from './pages/profesores/RegistroNotasMateria';
 import RegistroParticipacionMateria from './pages/profesores/RegistroParticipacionMateria';
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -45,7 +48,12 @@ function App() {
           {/* Administración */}
           <Route path="alumnos" element={<AlumnoListPage />} />
           <Route path="profesores" element={<ProfesorListPage />} />
-          <Route path="materias" element={<MateriaListPage />} />
+
+          <Route path="materias" element={<MateriaGrado />} />
+
+
+
+
           <Route path="periodos" element={<PeriodoListPage />} />
           <Route path="roles" element={<RolListPage />} />
           <Route path="usuarios" element={<UsuarioListPage />} />
