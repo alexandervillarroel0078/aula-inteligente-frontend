@@ -68,7 +68,7 @@ const ProfesorListPage = () => {
                 <tr key={p.id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 border-b">{index + 1}</td>
                   <td className="px-4 py-2 border-b">{p.codigo}</td>
-                  <td className="px-4 py-2 border-b">{p.nombre_completo}</td>
+                  <td className="px-4 py-2 border-b">{p.nombre}</td>
                   <td className="px-4 py-2 border-b">{p.ci}</td>
                   <td className="px-4 py-2 border-b">{p.email}</td>
                   <td className="px-4 py-2 border-b">{p.telefono}</td>

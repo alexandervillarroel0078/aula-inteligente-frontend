@@ -69,6 +69,18 @@ function App() {
           <Route path="profesor/:profesorId/materia/:materiaId/asistencias" element={<AsistenciasMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/participaciones" element={<ParticipacionesMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/estudiantes" element={<EstudiantesMateriaProfesor />} />
+          <Route path="profesor/:profesorId/grado/:gradoId/asistencias" element={<AsistenciasMateriaProfesor />} />
+          
+          
+          
+          <Route
+  path="profesor/:profesorId/materia/:materiaId/participaciones"
+  element={<ParticipacionesMateriaProfesor />}
+/>
+
+
+
+
 
           {/* Profesores - Registro */}
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/asistencias/nueva" element={<RegistroAsistenciaMateria />} />

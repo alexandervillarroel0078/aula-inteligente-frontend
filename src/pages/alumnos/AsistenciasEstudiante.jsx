@@ -105,7 +105,6 @@ const AsistenciasEstudiante = ({ alumnoId }) => {
                             </li>
                           ))}
                         </ul>
-
                         <ResponsiveContainer width="100%" height={200}>
                           <BarChart data={valores}>
                             <CartesianGrid strokeDasharray="3 3" />

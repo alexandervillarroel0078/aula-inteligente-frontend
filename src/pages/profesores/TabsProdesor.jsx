@@ -1,7 +1,6 @@
 // src/pages/profesores/TabsProfesor.jsx
-
 import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { obtenerProfesor } from '../../services/profesorService';
 import MateriasProfesor from './MateriaProfesor';
 
@@ -10,7 +9,7 @@ const TabsProfesor = () => {
     const [searchParams] = useSearchParams();
     const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'Perfil');
     const [profesor, setProfesor] = useState(null);
-
+    const navigate = useNavigate();
     const tabs = [
         'Perfil',
         'Materias',
@@ -40,8 +39,8 @@ const TabsProfesor = () => {
                             <div>
                                 <h2>{profesor.nombre_completo}</h2>
                                 <p><strong>CI:</strong> {profesor.ci}</p>
-                                <p><strong>Código:</strong> {profesor.codigo}</p>
-                                <p><strong>Email:</strong> {profesor.email}</p>
+                                <p><strong>Nombre:</strong> {profesor.nombre}</p>
+                                <p><strong>Apellido:</strong> {profesor.apellido}</p>
                                 <p><strong>Teléfono:</strong> {profesor.telefono}</p>
                                 <p><strong>Dirección:</strong> {profesor.direccion}</p>
                                 <p><strong>Estado:</strong> {profesor.estado}</p>
@@ -69,9 +68,10 @@ const TabsProfesor = () => {
 
     return (
         <div className="p-4">
+            
             {/* Encabezado */}
             <div className="mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">{profesor.nombre_completo}</h2>
+                <h2 className="text-2xl font-bold text-gray-800">{profesor.nombre}</h2>
                 <p className="text-sm text-gray-500">Profesor</p>
             </div>
 

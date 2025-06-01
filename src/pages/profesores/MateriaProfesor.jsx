@@ -1,27 +1,42 @@
-// src/pages/profesores/MateriasProfesor.jsx
-
 import React, { useEffect, useState } from 'react';
 import { obtenerMateriasDelProfesor } from '../../services/profesorService';
 import { useNavigate } from 'react-router-dom';
 
 const MateriasProfesor = ({ profesorId }) => {
     const navigate = useNavigate();
+    const [profesor, setProfesor] = useState(null);
     const [materias, setMaterias] = useState([]);
     const [cargando, setCargando] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
-            setCargando(true);
-            const data = await obtenerMateriasDelProfesor(profesorId);
-            setMaterias(data);
-            setCargando(false);
+            try {
+                setCargando(true);
+                const data = await obtenerMateriasDelProfesor(profesorId);
+                setProfesor(data.profesor);
+                setMaterias(data.materias_asignadas);
+            } catch (error) {
+                console.error('Error al obtener materias:', error);
+            } finally {
+                setCargando(false);
+            }
         };
-        if (profesorId) fetchData();
+
+        if (profesorId) {
+            fetchData();
+        }
     }, [profesorId]);
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Materias Asignadas</h2>
+
+            {profesor && materias.length > 0 && (
+                <div className="mb-4 text-gray-700 text-sm sm:text-base">
+                    <strong>Profesor:</strong> {profesor.nombre} {profesor.apellido} ({profesor.estado}) – Gestión: {materias[0].gestion}
+                </div>
+            )}
+
 
             {cargando ? (
                 <p className="text-gray-500">Cargando materias...</p>
@@ -33,52 +48,66 @@ const MateriasProfesor = ({ profesorId }) => {
                         <thead className="bg-gray-100">
                             <tr className="text-center">
                                 <th className="px-4 py-2 border-b">#</th>
-                                <th className="px-4 py-2 border-b">Nombre</th>
-                                <th className="px-4 py-2 border-b">Turno</th>
-                                <th className="px-4 py-2 border-b">Aula</th>
+                                <th className="px-4 py-2 border-b">Materia</th>
                                 <th className="px-4 py-2 border-b">Grado</th>
-                                <th className="px-4 py-2 border-b">Estado</th>
-                                <th className="px-4 py-2 border-b">gestion</th>
+                                <th className="px-4 py-2 border-b">Nivel</th>
+                                <th className="px-4 py-2 border-b">Gestión</th>
                                 <th className="px-4 py-2 border-b">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {materias.map((m, index) => (
-                                <tr key={m.id} className="hover:bg-gray-50 text-center">
+                                <tr key={m.materia_id} className="hover:bg-gray-50 text-center">
                                     <td className="px-4 py-2 border-b">{index + 1}</td>
-                                    <td className="px-4 py-2 border-b">{m.nombre}</td>
-                                    <td className="px-4 py-2 border-b">{m.turno}</td>
-                                    <td className="px-4 py-2 border-b">{m.aula}</td>
-                                    <td className="px-4 py-2 border-b">{m.grado_nombre}</td> {/* Se añadió el grado */}
-                                    <td className="px-4 py-2 border-b">
-                                        <span className={`px-2 py-1 text-xs rounded ${m.estado_asignacion === 'activo' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                            {m.estado_asignacion}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-2 border-b">{m.fecha_asignacion}</td> {/* Fecha de asignación */}
+                                    <td className="px-4 py-2 border-b">{m.materia}</td>
+                                    <td className="px-4 py-2 border-b">{m.grado}</td>
+                                    <td className="px-4 py-2 border-b">{m.nivel}</td>
+                                    <td className="px-4 py-2 border-b">{m.gestion}</td>
                                     <td className="px-4 py-2 border-b space-x-1">
+                                        {/* <button
+                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.materia_id}/notas`)}
+                                            className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                                        >
+                                            Notas
+                                        </button> */}
                                         <button
-                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/notas?grado_id=${m.grado_id}`)}
+                                            onClick={() =>
+                                                navigate(
+                                                    `/panel/profesor/${profesorId}/materia/${m.materia_id}/notas?grado_id=${m.grado_id}&nivel_id=${m.nivel_id}`
+                                                )
+                                            }
                                             className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
                                         >
                                             Notas
                                         </button>
+
                                         <button
                                             onClick={() =>
-                                                navigate(`/panel/profesor/${profesorId}/materia/${m.id}/asistencias?grado_id=${m.grado_id}`)
+                                                navigate(`/panel/profesor/${profesorId}/grado/${m.grado_id}/asistencias?nivel_id=${m.nivel_id}`)
                                             }
                                             className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
                                         >
                                             Asistencias
                                         </button>
-                                        <button
-                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/participaciones?grado_id=${m.grado_id}`)}
+                                        {/* <button
+                                            onClick={() => navigate(`/panel/profesor/${profesorId}/grado/${m.grado_id}/participaciones?nivel_id=${m.nivel_id}`)}
                                             className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200"
                                         >
                                             Participaciones
-                                        </button>
+                                        </button> */}
+<button
+  onClick={() =>
+    navigate(
+      `/panel/profesor/${profesorId}/materia/${m.materia_id}/participaciones?grado_id=${m.grado_id}&nivel_id=${m.nivel_id}`
+    )
+  }
+  className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200"
+>
+  Participaciones
+</button>
+
                                         <button
-                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.id}/estudiantes`)}
+                                            onClick={() => navigate(`/panel/profesor/${profesorId}/materia/${m.materia_id}/estudiantes`)}
                                             className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
                                         >
                                             Estudiantes
