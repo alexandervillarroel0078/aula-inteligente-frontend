@@ -63,29 +63,32 @@ const ParticipacionEstudiante = ({ alumnoId }) => {
               </span>
             </h2>
 
-            {Object.entries(datosGestion.grados).map(
-              ([gradoNombre, periodos]) => {
-                const materiasMap = {};
+            {Object.entries(datosGestion.grados).map(([gradoNombre, gradoData]) => {
+  const { estado_aprobacion, periodos } = gradoData;
+  const materiasMap = {};
 
-                Object.entries(periodos).forEach(([periodoNombre, materias]) => {
-                  Object.entries(materias).forEach(
-                    ([materiaNombre, listaParticipaciones]) => {
-                      if (!materiasMap[materiaNombre]) {
-                        materiasMap[materiaNombre] = [];
-                      }
-                      listaParticipaciones.forEach((p) => {
-                        materiasMap[materiaNombre].push({
-                          periodo: periodoNombre,
-                          valor: p.valor,
-                        });
-                      });
-                    }
-                  );
-                });
+  Object.entries(periodos).forEach(([periodoNombre, materias]) => {
+    Object.entries(materias).forEach(([materiaNombre, listaParticipaciones]) => {
+      if (!materiasMap[materiaNombre]) {
+        materiasMap[materiaNombre] = [];
+      }
+      listaParticipaciones.forEach((p) => {
+        materiasMap[materiaNombre].push({
+          periodo: periodoNombre,
+          valor: p.valor,
+        });
+      });
+    });
+  });
 
-                return (
-                  <div key={gradoNombre} className="mb-4">
-                    <h3 className="text-lg font-bold mb-2">{gradoNombre}</h3>
+  return (
+    <div key={gradoNombre} className="mb-4">
+      <h3 className="text-lg font-bold mb-1">
+        {gradoNombre}{" "}
+        <span className="text-sm text-green-600 italic">
+          ({estado_aprobacion})
+        </span>
+      </h3>
 
                     {Object.keys(materiasMap).length === 0 ? (
                       <p className="text-gray-500 italic">

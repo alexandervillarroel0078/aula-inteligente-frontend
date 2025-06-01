@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { obtenerNotasAlumno } from "../../services/alumnoService";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer
+} from "recharts";
 
 const NotasEstudiante = ({ alumnoId }) => {
   const [datosAlumno, setDatosAlumno] = useState(null);
@@ -33,7 +36,6 @@ const NotasEstudiante = ({ alumnoId }) => {
         Notas de {datosAlumno.alumno_nombre}
       </h1>
 
-      {/* Selector de gestión */}
       <div className="mb-4">
         <label className="font-semibold mr-2">Seleccionar gestión:</label>
         <select
@@ -50,7 +52,6 @@ const NotasEstudiante = ({ alumnoId }) => {
         </select>
       </div>
 
-      {/* Mostrar notas */}
       {gestionesFiltradas.map((gestion) => {
         const datosGestion = datosAlumno.notas[gestion];
 
@@ -64,73 +65,69 @@ const NotasEstudiante = ({ alumnoId }) => {
             </h2>
 
             {Object.entries(datosGestion.grados).map(
-              ([gradoNombre, periodos]) => {
-                // Recolectar datos por materia
+              ([gradoNombre, gradoData]) => {
                 const materiasMap = {};
 
-                Object.entries(periodos).forEach(([periodoNombre, materias]) => {
-                  Object.entries(materias).forEach(
-                    ([materiaNombre, listaNotas]) => {
-                      if (!materiasMap[materiaNombre]) {
-                        materiasMap[materiaNombre] = [];
-                      }
-                      listaNotas.forEach((nota) => {
-                        materiasMap[materiaNombre].push({
-                          periodo: periodoNombre,
-                          nota: nota.valor,
-                        });
-                      });
+                Object.entries(gradoData.periodos).forEach(([periodoNombre, materias]) => {
+                  Object.entries(materias).forEach(([materiaNombre, listaNotas]) => {
+                    if (!materiasMap[materiaNombre]) {
+                      materiasMap[materiaNombre] = [];
                     }
-                  );
+                    listaNotas.forEach((nota) => {
+                      materiasMap[materiaNombre].push({
+                        periodo: periodoNombre,
+                        nota: nota.valor,
+                      });
+                    });
+                  });
                 });
 
                 return (
                   <div key={gradoNombre} className="mb-4">
-                    <h3 className="text-lg font-bold mb-2">{gradoNombre}</h3>
+                    <h3 className="text-lg font-bold mb-1">
+                      {gradoNombre}{" "}
+                      <span className="text-sm text-gray-600 italic">
+                        ({gradoData.estado_aprobacion})
+                      </span>
+                    </h3>
 
                     {Object.keys(materiasMap).length === 0 ? (
-                      <p className="text-gray-500 italic">
-                        No hay notas registradas.
-                      </p>
+                      <p className="text-gray-500 italic">No hay notas registradas.</p>
                     ) : (
-                      Object.entries(materiasMap).map(
-                        ([materiaNombre, notasMateria]) => (
-                          <div
-                            key={materiaNombre}
-                            className="mb-6 p-3 border rounded"
-                          >
-                            <h4 className="text-md font-semibold mb-1">
-                              {materiaNombre}
-                            </h4>
+                      Object.entries(materiasMap).map(([materiaNombre, notasMateria]) => (
+                        <div
+                          key={materiaNombre}
+                          className="mb-6 p-3 border rounded"
+                        >
+                          <h4 className="text-md font-semibold mb-1">
+                            {materiaNombre}
+                          </h4>
 
-                            {/* Lista de notas */}
-                            <ul className="list-disc pl-6 mb-2">
-                              {notasMateria.map((n, idx) => (
-                                <li key={idx}>
-                                  {n.periodo}: <strong>{n.nota}</strong>
-                                </li>
-                              ))}
-                            </ul>
+                          <ul className="list-disc pl-6 mb-2">
+                            {notasMateria.map((n, idx) => (
+                              <li key={idx}>
+                                {n.periodo}: <strong>{n.nota}</strong>
+                              </li>
+                            ))}
+                          </ul>
 
-                            {/* Gráfico por materia */}
-                            <ResponsiveContainer width="100%" height={200}>
-                              <LineChart data={notasMateria}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="periodo" />
-                                <YAxis domain={[0, 100]} />
-                                <Tooltip />
-                                <Legend />
-                                <Line
-                                  type="monotone"
-                                  dataKey="nota"
-                                  stroke="#8884d8"
-                                  name={materiaNombre}
-                                />
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </div>
-                        )
-                      )
+                          <ResponsiveContainer width="100%" height={200}>
+                            <LineChart data={notasMateria}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="periodo" />
+                              <YAxis domain={[0, 100]} />
+                              <Tooltip />
+                              <Legend />
+                              <Line
+                                type="monotone"
+                                dataKey="nota"
+                                stroke="#8884d8"
+                                name={materiaNombre}
+                              />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        </div>
+                      ))
                     )}
                   </div>
                 );

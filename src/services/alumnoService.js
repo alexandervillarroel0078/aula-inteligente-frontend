@@ -35,10 +35,40 @@ export const obtenerParticipacionAlumno = async (alumnoId) => {
     throw error;
   }
 };
-
-
-
-
+//funciona
+export const obtenerNotasAlumno = async (id) => {
+  const response = await api.get(`/api/alumnos/notas?alumno_id=${id}`);
+  return response.data;
+};
+//funciona
+export const obtenerMateriasAlumno = async (alumnoId) => {
+  try {
+    const response = await api.get(`/api/alumnos/materias?alumno_id=${alumnoId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener las materias del alumno:", error);
+    throw error;
+  }
+};
+//funciona
+export const obtenerHistorialAcademico = async (alumnoId) => {
+  try {
+    const response = await api.get(`/api/alumnos/historial-academico?alumno_id=${alumnoId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener historial académico:', error);
+    throw error;
+  }
+};
+export const obtenerPromediosPorGrado = async (alumnoId) => {
+  try {
+    const response = await api.get(`/api/alumnos/promedios-por-grado?alumno_id=${alumnoId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener promedios por grado:', error);
+    throw error;
+  }
+};
 
 
 
@@ -99,10 +129,7 @@ export const eliminarAlumno = async (id) => {
 // 🟢 Funciones del Alumno
 
 // 🟢 Funciones del Alumno
-export const obtenerNotasAlumno = async (id) => {
-  const response = await api.get(`/api/alumnos/notas?alumno_id=${id}`);
-  return response.data;
-};
+ 
 
 
 
@@ -117,14 +144,4 @@ export const obtenerHistorialAlumno = async (id) => {
 
 
 
-//funciona
-export const obtenerMateriasAlumno = async (alumnoId) => {
-  try {
-    const response = await api.get(`/api/alumnos/materias?alumno_id=${alumnoId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error al obtener las materias del alumno:", error);
-    throw error;
-  }
-};
 

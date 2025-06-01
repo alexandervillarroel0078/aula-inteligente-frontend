@@ -61,72 +61,68 @@ const AsistenciasEstudiante = ({ alumnoId }) => {
               </span>
             </h2>
 
-            {Object.entries(datosGestion.grados).map(
-              ([gradoNombre, periodos]) => {
-                const materiasMap = {};
+            {Object.entries(datosGestion.grados).map(([gradoNombre, gradoData]) => {
+              const { estado_aprobacion, periodos } = gradoData;
 
-                Object.entries(periodos).forEach(([periodoNombre, materias]) => {
-                  Object.entries(materias).forEach(
-                    ([materiaNombre, listaAsistencias]) => {
-                      if (!materiasMap[materiaNombre]) {
-                        materiasMap[materiaNombre] = [];
-                      }
-                      listaAsistencias.forEach((asistencia) => {
-                        materiasMap[materiaNombre].push({
-                          periodo: periodoNombre,
-                          valor: asistencia.valor,
-                        });
-                      });
-                    }
-                  );
+              const materiasMap = {};
+
+              Object.entries(periodos).forEach(([periodoNombre, materias]) => {
+                Object.entries(materias).forEach(([materiaNombre, listaAsistencias]) => {
+                  if (!materiasMap[materiaNombre]) {
+                    materiasMap[materiaNombre] = [];
+                  }
+                  listaAsistencias.forEach((asistencia) => {
+                    materiasMap[materiaNombre].push({
+                      periodo: periodoNombre,
+                      valor: asistencia.valor,
+                    });
+                  });
                 });
+              });
 
-                return (
-                  <div key={gradoNombre} className="mb-4">
-                    <h3 className="text-lg font-bold mb-2">{gradoNombre}</h3>
+              return (
+                <div key={gradoNombre} className="mb-4">
+                  <h3 className="text-lg font-bold mb-1">{gradoNombre}</h3>
+                  <p className="text-sm text-blue-600 mb-2">
+                    Estado de aprobación: <strong>{estado_aprobacion}</strong>
+                  </p>
 
-                    {Object.keys(materiasMap).length === 0 ? (
-                      <p className="text-gray-500 italic">
-                        No hay asistencias registradas.
-                      </p>
-                    ) : (
-                      Object.entries(materiasMap).map(
-                        ([materiaNombre, valores]) => (
-                          <div
-                            key={materiaNombre}
-                            className="mb-6 p-3 border rounded"
-                          >
-                            <h4 className="text-md font-semibold mb-1">
-                              {materiaNombre}
-                            </h4>
+                  {Object.keys(materiasMap).length === 0 ? (
+                    <p className="text-gray-500 italic">
+                      No hay asistencias registradas.
+                    </p>
+                  ) : (
+                    Object.entries(materiasMap).map(([materiaNombre, valores]) => (
+                      <div key={materiaNombre} className="mb-6 p-3 border rounded">
+                        <h4 className="text-md font-semibold mb-1">
+                          {materiaNombre}
+                        </h4>
 
-                            <ul className="list-disc pl-6 mb-2">
-                              {valores.map((a, idx) => (
-                                <li key={idx}>
-                                  {a.periodo}: <strong>{a.valor}%</strong>
-                                </li>
-                              ))}
-                            </ul>
+                        <ul className="list-disc pl-6 mb-2">
+                          {valores.map((a, idx) => (
+                            <li key={idx}>
+                              {a.periodo}: <strong>{a.valor}%</strong>
+                            </li>
+                          ))}
+                        </ul>
 
-                            <ResponsiveContainer width="100%" height={200}>
-                              <BarChart data={valores}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="periodo" />
-                                <YAxis domain={[0, 100]} />
-                                <Tooltip />
-                                <Legend />
-                                <Bar dataKey="valor" fill="#4caf50" name="Asistencia" />
-                              </BarChart>
-                            </ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={200}>
+                          <BarChart data={valores}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="periodo" />
+                            <YAxis domain={[0, 100]} />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="valor" fill="#4caf50" name="Asistencia" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    ))
+                  )}
+                </div>
+              );
+            })}
 
-                          </div>
-                        )
-                      )
-                    )}
-                  </div>
-                );
-              }
-            )}
           </div>
         );
       })}
