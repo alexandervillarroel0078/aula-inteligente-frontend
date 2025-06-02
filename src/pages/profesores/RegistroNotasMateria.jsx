@@ -1,121 +1,141 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  obtenerDetalleEstudiantesMateriaRegistroAsistencia,
+  obtenerPeriodosActivos,
+  registrarNotasParciales // ← cambio aquí
+} from '../../services/profesorService'; // ← asegúrate de que esté actualizado también el servicio
 
 const RegistroNotasMateria = () => {
+  const { profesorId, materiaId } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const handleVolver = () => {
-    navigate('/panel/profesor/notas-materia'); // Redirige a la página de NotasMateriaProfesor
+  const gradoId = parseInt(searchParams.get('grado_id'));
+  const nivelId = parseInt(searchParams.get('nivel_id'));
+
+  const [periodos, setPeriodos] = useState([]);
+  const [periodoSeleccionado, setPeriodoSeleccionado] = useState('');
+
+  const [alumnos, setAlumnos] = useState([]);
+  const [notas, setNotas] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const [listaEstudiantes, listaPeriodos] = await Promise.all([
+          obtenerDetalleEstudiantesMateriaRegistroAsistencia(profesorId, materiaId),
+          obtenerPeriodosActivos()
+        ]);
+        setAlumnos(listaEstudiantes);
+        setPeriodos(listaPeriodos);
+      } catch (error) {
+        console.error('❌ Error al cargar estudiantes o periodos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarDatos();
+  }, [profesorId, materiaId]);
+
+  const manejarCambio = (alumnoId, valor) => {
+    setNotas((prev) => ({
+      ...prev,
+      [alumnoId]: valor
+    }));
   };
 
+  const guardarNotas = async () => {
+    if (!periodoSeleccionado) {
+      alert('⚠️ Debes seleccionar un periodo antes de guardar.');
+      return;
+    }
+
+    const listaNotas = alumnos.map((alumno) => ({
+      alumno_id: alumno.id,
+      materia_id: parseInt(materiaId),
+      grado_id: gradoId,
+      periodo_id: parseInt(periodoSeleccionado),
+      nota_parcial: parseFloat(notas[alumno.id] || 0)
+    }));
+
+    try {
+      await registrarNotasParciales(listaNotas); // ← envío de todos juntos
+      alert('✅ Notas registradas correctamente.');
+      navigate(-1);
+    } catch (error) {
+      alert('❌ Error al registrar notas.');
+    }
+  };
+
+  if (loading) return <p>Cargando estudiantes y periodos...</p>;
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4">Registrar Notas para la Materia</h2>
+    <div className="p-6 max-w-4xl mx-auto bg-white rounded shadow">
+      <h2 className="text-xl font-bold mb-4 text-blue-700">Registro de Notas Parciales</h2>
 
-      <form className="space-y-4">
-        {/* Selector de Alumno */}
-        <div className="flex flex-col">
-          <label htmlFor="alumno" className="text-sm font-medium text-gray-700">Seleccionar Alumno</label>
-          <select
-            id="alumno"
-            className="p-2 border border-gray-300 rounded"
-            required
-          >
-            <option value="">Selecciona un Alumno</option>
-            {/* Aquí deberían aparecer los alumnos */}
-            <option value="1">Luis Mendoza Pérez</option>
-            <option value="2">Carla Romero García</option>
-            {/* Agregar más opciones */}
-          </select>
-        </div>
+      <label className="block mb-4 text-sm text-gray-700">
+        Seleccionar periodo:
+        <select
+          value={periodoSeleccionado}
+          onChange={(e) => setPeriodoSeleccionado(e.target.value)}
+          className="ml-2 border px-2 py-1 rounded"
+        >
+          <option value="">-- Selecciona un periodo --</option>
+          {periodos.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.nombre} ({p.fecha_inicio} → {p.fecha_fin})
+            </option>
+          ))}
+        </select>
+      </label>
 
-        {/* Selector de Periodo */}
-        <div className="flex flex-col">
-          <label htmlFor="periodo" className="text-sm font-medium text-gray-700">Seleccionar Periodo</label>
-          <select
-            id="periodo"
-            className="p-2 border border-gray-300 rounded"
-            required
-          >
-            <option value="">Selecciona un Periodo</option>
-            {/* Aquí deberían aparecer los periodos */}
-            <option value="1">1er Bimestre 2022</option>
-            <option value="2">2do Bimestre 2022</option>
-            {/* Agregar más opciones */}
-          </select>
-        </div>
+      <table className="w-full table-auto border text-sm">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="border px-2 py-1">#</th>
+            <th className="border px-2 py-1">Alumno</th>
+            <th className="border px-2 py-1">Nota Parcial</th>
+          </tr>
+        </thead>
+        <tbody>
+          {alumnos.map((alumno, index) => (
+            <tr key={alumno.id}>
+              <td className="border px-2 py-1 text-center">{index + 1}</td>
+              <td className="border px-2 py-1">{alumno.nombre} {alumno.apellido}</td>
+              <td className="border px-2 py-1 text-center">
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.1"
+                  value={notas[alumno.id] || ''}
+                  onChange={(e) => manejarCambio(alumno.id, e.target.value)}
+                  className="w-24 border px-2 py-1 rounded text-center"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-        {/* Selector de Grado */}
-        <div className="flex flex-col">
-          <label htmlFor="grado" className="text-sm font-medium text-gray-700">Seleccionar Grado</label>
-          <select
-            id="grado"
-            className="p-2 border border-gray-300 rounded"
-            required
-          >
-            <option value="">Selecciona un Grado</option>
-            {/* Aquí deberían aparecer los grados */}
-            <option value="1">1ro A</option>
-            <option value="2">2do B</option>
-            {/* Agregar más opciones */}
-          </select>
-        </div>
+      <div className="flex justify-between mt-6">
+        <button
+          onClick={guardarNotas}
+          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+        >
+          💾 Guardar todas las notas
+        </button>
 
-        {/* Notas y Observaciones */}
-        <div className="flex flex-col sm:flex-row sm:space-x-4">
-          <div className="flex flex-col sm:w-1/3">
-            <label htmlFor="notaParcial" className="text-sm font-medium text-gray-700">Nota Parcial</label>
-            <input
-              type="number"
-              id="notaParcial"
-              className="p-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
-
-          <div className="flex flex-col sm:w-1/3">
-            <label htmlFor="notaParticipacion" className="text-sm font-medium text-gray-700">Nota Participación</label>
-            <input
-              type="number"
-              id="notaParticipacion"
-              className="p-2 border border-gray-300 rounded"
-            />
-          </div>
-
-          <div className="flex flex-col sm:w-1/3">
-            <label htmlFor="notaAsistencia" className="text-sm font-medium text-gray-700">Nota Asistencia</label>
-            <input
-              type="number"
-              id="notaAsistencia"
-              className="p-2 border border-gray-300 rounded"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col">
-          <label htmlFor="observaciones" className="text-sm font-medium text-gray-700">Observaciones</label>
-          <textarea
-            id="observaciones"
-            className="p-2 border border-gray-300 rounded"
-          />
-        </div>
-
-        <div className="mt-4">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Registrar Nota
-          </button>
-          <button
-            onClick={() => navigate(-1)} // Navega hacia la página anterior
-            className="mb-4 px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
-          >
-            ⬅️ Volver
-          </button>
-        </div>
-      </form>
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+        >
+          ⬅️ Volver
+        </button>
+      </div>
     </div>
   );
 };

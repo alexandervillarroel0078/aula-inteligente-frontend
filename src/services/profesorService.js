@@ -1,3 +1,4 @@
+//services/profesorService.js
 import api from './api';
 
 //funciona
@@ -38,6 +39,16 @@ export const obtenerDetalleEstudiantesMateriaRegistroAsistencia = async (profeso
 export const obtenerPeriodosActivos = async () => {
   const response = await api.get('/api/periodos/activos');
   return response.data;
+};
+
+export const registrarNotasParciales = async (listaDeNotas) => {
+  try {
+    const respuesta = await api.post('/api/notas-trimestre/registrar-parcial', listaDeNotas); // se envía como arreglo
+    return respuesta.data;
+  } catch (error) {
+    console.error('❌ Error al registrar notas parciales:', error);
+    throw error;
+  }
 };
 
 
