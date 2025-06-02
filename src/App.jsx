@@ -79,14 +79,8 @@ function App() {
 
           {/* CRUD PROFESOR registrar asistencia y participaciones de estudiante */}
           <Route path="/panel/profesores/:profesorId/registro-asistencia/:gradoId" element={<RegistroAsistenciaMateria />} />
-          <Route
-            path="/panel/profesores/:profesorId/registro-participacion/:gradoId"
-            element={<RegistroParticipacionMateria />}
-          />
-          <Route
-            path="/panel/profesor/:profesorId/materia/:materiaId/notas/registrar"
-            element={<RegistroNotasMateria />}
-          />
+          <Route path="/panel/profesores/:profesorId/registro-participacion/:gradoId" element={<RegistroParticipacionMateria />} />
+          <Route path="/panel/profesor/:profesorId/materia/:materiaId/notas/registrar" element={<RegistroNotasMateria />} />
 
 
           {/* Global */}

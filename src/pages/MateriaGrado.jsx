@@ -38,6 +38,12 @@ const MateriaListPage = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <button
+        onClick={() => navigate(-1)}
+        className="mt-4 px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+      >
+        ⬅️ Volver
+      </button>
       <h2 className="text-xl font-bold text-gray-800 mb-4">
         Materias de {datos.grado} ({datos.gestion})
       </h2>

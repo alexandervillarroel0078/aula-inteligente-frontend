@@ -35,7 +35,7 @@ import api from './api';
 // 1. Listar usuarios
 export const listarUsuarios = async () => {
   try {
-    const response = await api.get('/usuarios');
+    const response = await api.get('/api/usuarios');
     return response.data;
   } catch (error) {
     throw error.response?.data || { error: 'Error al listar usuarios' };

@@ -107,6 +107,25 @@ export async function registrarAsistenciaMasiva(listaAsistencias) {
   }
 }
 
+// actualiza asistencia promedio en nota_trimestre
+export async function ActualizarAsistenciaNotaTrimestre(params) {
+  try {
+    const response = await api.put('/api/notas-trimestre/asistencia', null, { params });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Error al registrar asistencia');
+  }
+}
+
+// actualiza participación promedio en nota_trimestre
+export async function ActualizarParticipacionNotaTrimestre(params) {
+  try {
+    const response = await api.put('/api/notas-trimestre/participaciones', null, { params });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Error al registrar participación');
+  }
+}
 
 
 

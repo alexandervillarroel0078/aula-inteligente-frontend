@@ -89,6 +89,7 @@ const AsistenciasMateriaProfesor = () => {
                       <th className="px-3 py-2 border">Tardanzas</th>
                       <th className="px-3 py-2 border">Muy Tarde</th>
                       <th className="px-3 py-2 border">Ausencias</th>
+                      <th className="px-3 py-2 border">Licencia</th>
                       <th className="px-3 py-2 border">Total</th>
                       <th className="px-3 py-2 border">Promedio %</th>
                     </tr>
@@ -103,6 +104,7 @@ const AsistenciasMateriaProfesor = () => {
                         <td className="border px-2 py-1 text-center">{a.llegadas_tarde}</td>
                         <td className="border px-2 py-1 text-center">{a.muy_tarde}</td>
                         <td className="border px-2 py-1 text-center">{a.ausencias}</td>
+                        <td className="border px-2 py-1 text-center">{a.licencias}</td>
                         <td className="border px-2 py-1 text-center">{a.total_clases}</td>
                         <td className="border px-2 py-1 text-center">{a.promedio_asistencia}%</td>
                       </tr>
