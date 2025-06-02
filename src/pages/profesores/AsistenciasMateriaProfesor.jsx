@@ -7,10 +7,12 @@ const AsistenciasMateriaProfesor = () => {
   const { profesorId, gradoId } = useParams();
   const [searchParams] = useSearchParams();
   const nivelId = searchParams.get('nivel_id');
-
+  const materiaId = searchParams.get('materia_id');
   const [datos, setDatos] = useState(null);
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
+
+  
   useEffect(() => {
     const cargarAsistencias = async () => {
       try {
@@ -41,6 +43,24 @@ const AsistenciasMateriaProfesor = () => {
       >
         ⬅️ Volver
       </button>
+      {/* <button
+        onClick={() =>
+          navigate(`/panel/profesores/${profesorId}/registro-asistencia/${gradoId}?nivel_id=${nivelId}&materia_id=${materiaId}`)
+
+        }
+        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        ➕ Registrar Asistencia
+      </button> */}
+      <button
+        onClick={() =>
+          navigate(`/panel/profesores/${profesorId}/registro-asistencia/${gradoId}?nivel_id=${nivelId}&materia_id=${materiaId}`)
+        }
+        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        ➕ Registrar Asistencia
+      </button>
+
       <h2 className="text-xl font-bold text-blue-700 mb-2">
         Asistencias por Periodo – {datos.grado?.nombre} ({datos.nivel})
       </h2>

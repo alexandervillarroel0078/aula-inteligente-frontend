@@ -66,6 +66,15 @@ const ParticipacionesMateriaProfesor = () => {
             >
                 ⬅️ Volver
             </button>
+            <button
+                onClick={() =>
+                    navigate(`/panel/profesores/${profesorId}/registro-participacion/${gradoId}?nivel_id=${nivelId}&materia_id=${materiaId}`)
+                }
+                className="mb-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+            >
+                ➕ Registrar participación
+            </button>
+
             <h2 className="text-xl font-semibold mb-2">
                 Participaciones – {datos.materia?.nombre} ({datos.nombre_grado} – {datos.nombre_nivel})
             </h2>

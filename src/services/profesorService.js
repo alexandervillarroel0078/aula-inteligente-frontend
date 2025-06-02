@@ -22,11 +22,25 @@ export const obtenerAsistenciasPorGrado = async (gradoId, profesorId, nivelId) =
   const response = await api.get(url);
   return response.data;
 };
+
 //funciona
 export const obtenerEstudiantesPorMateria = async (profesorId, materiaId) => {
   const response = await api.get(`/api/profesores/${profesorId}/materias/${materiaId}/estudiantes`);
   return response.data;
 };
+
+//para registrar asistencia especialmente mismo metodo se ocupa en el bakend qeu obtenerEstudiantesPorMateria
+export const obtenerDetalleEstudiantesMateriaRegistroAsistencia = async (profesorId, materiaId) => {
+  const response = await api.get(`/api/profesores/${profesorId}/materias/${materiaId}/estudiantes`);
+  return response.data.estudiantes;  // devuelve todo el objeto
+};
+
+export const obtenerPeriodosActivos = async () => {
+  const response = await api.get('/api/periodos/activos');
+  return response.data;
+};
+
+
 
 export const obtenerParticipacionesPorGrado = async (gradoId, profesorId, nivelId) => {
   try {
@@ -61,30 +75,27 @@ export const obtenerNotasPorMateriaYGrado = async (gradoId, profesorId, nivelId,
   }
 };
 
-
-
-
-
-
-
-
-export const obtenerNotasPorMateriaProfesorGrado = async (profesorId, materiaId, gradoId, periodoId = null) => {
-  let url = `/api/notas/profesor?profesor_id=${profesorId}&materia_id=${materiaId}&grado_id=${gradoId}`;
-  if (periodoId) {
-    url += `&periodo_id=${periodoId}`;
+// Registrar participación y asistenicia individual
+export async function registrarParticipacion(payload) {
+  try {
+    const response = await api.post('/api/registrar-asistencia-presentacion', payload);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || 'Error al registrar participación');
   }
-  const response = await api.get(url);
-  return response.data;
-};
+}
 
-export const obtenerParticipacionPorProfesorMateriaGrado = async (profesorId, materiaId, gradoId, periodoId = null) => {
-  let url = `/api/participaciones/profesor?profesor_id=${profesorId}&materia_id=${materiaId}&grado_id=${gradoId}`;
-  if (periodoId) {
-    url += `&periodo_id=${periodoId}`;
+// Registrar asistencia masiva
+export async function registrarAsistenciaMasiva(listaAsistencias) {
+  try {
+    const response = await api.post('/api/asistencia/masiva', listaAsistencias);
+    return response.data;
+  } catch (error) {
+    const errores = error.response?.data?.errores;
+    throw new Error(errores ? errores.join('\n') : 'Error al registrar asistencia masiva');
   }
-  const response = await api.get(url);
-  return response.data;
-};
+}
+
 
 
 

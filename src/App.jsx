@@ -51,9 +51,6 @@ function App() {
 
           <Route path="materias" element={<MateriaGrado />} />
 
-
-
-
           <Route path="periodos" element={<PeriodoListPage />} />
           <Route path="roles" element={<RolListPage />} />
           <Route path="usuarios" element={<UsuarioListPage />} />
@@ -67,20 +64,9 @@ function App() {
           <Route path="profesores/:id/tabs" element={<TabsProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/notas" element={<NotasMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/asistencias" element={<AsistenciasMateriaProfesor />} />
-          <Route path="profesor/:profesorId/materia/:materiaId/participaciones" element={<ParticipacionesMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/estudiantes" element={<EstudiantesMateriaProfesor />} />
           <Route path="profesor/:profesorId/grado/:gradoId/asistencias" element={<AsistenciasMateriaProfesor />} />
-          
-          
-          
-          <Route
-  path="profesor/:profesorId/materia/:materiaId/participaciones"
-  element={<ParticipacionesMateriaProfesor />}
-/>
-
-
-
-
+          <Route path="profesor/:profesorId/materia/:materiaId/participaciones" element={<ParticipacionesMateriaProfesor />} />
 
           {/* Profesores - Registro */}
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/asistencias/nueva" element={<RegistroAsistenciaMateria />} />
@@ -89,8 +75,19 @@ function App() {
           <Route path="/panel/profesor/registro-notas" element={<RegistroNotasMateria />} />
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/participaciones/nueva" element={<RegistroParticipacionMateria />} />
 
+
+
+          {/* CRUD PROFESOR registrar asistencia y participaciones de estudiante */}
+          <Route path="/panel/profesores/:profesorId/registro-asistencia/:gradoId" element={<RegistroAsistenciaMateria />} />
+<Route
+  path="/panel/profesores/:profesorId/registro-participacion/:gradoId"
+  element={<RegistroParticipacionMateria />}
+/>
+
+
           {/* Global */}
           <Route path="global" element={<Global />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
