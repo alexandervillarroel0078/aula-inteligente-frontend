@@ -33,6 +33,7 @@ import NotasMateriaProfesor from './pages/profesores/NotasMateriaProfesor';
 import AsistenciasMateriaProfesor from './pages/profesores/AsistenciasMateriaProfesor';
 import ParticipacionesMateriaProfesor from './pages/profesores/ParticipacionesMateriaProfesor';
 import EstudiantesMateriaProfesor from './pages/profesores/EstudiantesMateriaProfesor';
+import PrediccionGrupo from './pages/profesores/PrediccionGrupo';
 
 // Profesores - Registro
 import RegistroAsistenciaMateria from './pages/profesores/RegistroAsistenciaMateria';
@@ -74,6 +75,9 @@ function App() {
           <Route path="profesor/:profesorId/materia/:materiaId/estudiantes" element={<EstudiantesMateriaProfesor />} />
           <Route path="profesor/:profesorId/grado/:gradoId/asistencias" element={<AsistenciasMateriaProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/participaciones" element={<ParticipacionesMateriaProfesor />} />
+           <Route path="/panel/profesor/:profesorId/prediccion-grupo" element={<PrediccionGrupo profesorId={1} />} />
+
+
 
           {/* Profesores - Registro */}
           <Route path="/panel/profesores/:profesorId/materias/:materiaId/asistencias/nueva" element={<RegistroAsistenciaMateria />} />

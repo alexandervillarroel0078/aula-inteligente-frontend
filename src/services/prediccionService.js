@@ -29,7 +29,27 @@ export const obtenerPrediccionesPorAlumno = async (alumnoId) => {
   const response = await api.get(`/api/predicciones/alumno/${alumnoId}`);
   return response.data;
 };
+
+
 export const listarGradosDelProfesor = async (profesorId) => {
   const response = await api.get(`/api/predicciones/grados/${profesorId}`);
+  return response.data;
+};
+
+
+// Obtener predicciones por materia y periodo
+export const listarPrediccionesPorMateria = async (materiaId, periodoId) => {
+  const response = await api.get('/api/predicciones/listar-por-materia', {
+    params: {
+      materia_id: materiaId,
+      periodo_id: periodoId,
+    },
+  });
+  return response.data;
+};
+
+// Listar materias asignadas a un profesor para predicción
+export const listarMateriasDelProfesor = async (profesorId) => {
+  const response = await api.get(`/api/profesor/${profesorId}/materias-prediccion`);
   return response.data;
 };

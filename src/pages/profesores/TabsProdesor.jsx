@@ -4,7 +4,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { obtenerProfesor } from '../../services/profesorService';
 import MateriasProfesor from './MateriaProfesor';
 import PrediccionesDashboard from './PrediccionesDashboard';
-
+import PrediccionGrupo from './PrediccionGrupo';
 const TabsProfesor = () => {
     const { id } = useParams();
     const [searchParams] = useSearchParams();
@@ -55,7 +55,7 @@ const TabsProfesor = () => {
             case 'Materias':
                 return <MateriasProfesor profesorId={profesor.id} />;
             case 'Predicción':
-                return <p>📈 Aquí se mostrarán predicciones de rendimiento académico.</p>;
+                return <PrediccionGrupo profesorId={profesor.id} />;
             case 'Dashboard':
                 return <PrediccionesDashboard profesorId={profesor.id} />;
 
