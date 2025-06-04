@@ -111,10 +111,7 @@ export const obtenerPromediosPorGrado = async (alumnoId) => {
 
 
 
-export const crearAlumno = async (data) => {
-  const response = await api.post('/api/alumnos/', data);
-  return response.data;
-};
+ 
 
 export const editarAlumno = async (id, data) => {
   const response = await api.put(`/api/alumnos/${id}`, data);

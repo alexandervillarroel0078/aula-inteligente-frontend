@@ -22,6 +22,10 @@ import BitacoraListPage from './pages/BitacoraListPage';
 
 // Alumnos
 import TabsEstudiante from './pages/alumnos/TabsEstudiante';
+import AlumnoCrearPage from './pages/AlumnoCrearPage';
+import AlumnoInscripcionPage from './pages/AlumnoInscripcionPage';
+import AlumnoContraseña from './pages/AlumnoContraseña';
+
 
 // Profesores - Tabs y vistas por materia
 import TabsProfesor from './pages/profesores/TabsProdesor';
@@ -59,7 +63,10 @@ function App() {
 
           {/* Alumnos */}
           <Route path="alumnos/:id/tabs" element={<TabsEstudiante />} />
-
+          <Route path="/panel/alumnos/crear" element={<AlumnoCrearPage />} />
+          <Route path="/panel/alumnos/:id/inscribir" element={<AlumnoInscripcionPage />} />
+          <Route path="/panel/alumnos/:id/contrasena" element={<AlumnoContraseña />} />
+          
           {/* Profesores - Tabs */}
           <Route path="profesores/:id/tabs" element={<TabsProfesor />} />
           <Route path="profesor/:profesorId/materia/:materiaId/notas" element={<NotasMateriaProfesor />} />

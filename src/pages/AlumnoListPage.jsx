@@ -48,13 +48,12 @@ const AlumnoListPage = () => {
 
       <div className="mb-4 text-right">
         <button
-          onClick={() => console.log("Crear alumno")}
+          onClick={() => navigate('/panel/alumnos/crear')}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm"
         >
-          ➕ Nuevo Alumnovv
+          ➕ Nuevo Alumno
         </button>
       </div>
-
 
       {cargando ? (
         <p className="text-gray-500">Cargando alumnos...</p>
@@ -87,24 +86,23 @@ const AlumnoListPage = () => {
                       >
                         <FaEye className="w-4 h-4" />
                       </button>
-                      {/* <button
-                        onClick={() => handleEditar(alumno.id)}
-                        className="p-1 rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600"
-                        title="Editar"
-                      >
-                        <FaEdit className="w-4 h-4" />
-                      </button>
                       <button
-                        onClick={() => handleEliminar(alumno.id)}
-                        className="p-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
-                        title="Eliminar"
+  onClick={() => navigate(`/panel/alumnos/${alumno.id}/contrasena`)}
+  className="p-1 rounded-full bg-yellow-100 hover:bg-yellow-200 text-yellow-600"
+  title="Cambiar contraseña"
+>
+  <FaEdit className="w-4 h-4" />
+</button>
+
+                      <button
+                        onClick={() => navigate(`/panel/alumnos/${alumno.id}/inscribir`)}
+                        className="p-1 rounded-full bg-green-100 hover:bg-green-200 text-green-600"
+                        title="Inscribir"
                       >
-                        <FaTrash className="w-4 h-4" />
-                      </button> */}
+                        📝
+                      </button>
                     </div>
                   </td>
-
-
                 </tr>
               ))}
             </tbody>

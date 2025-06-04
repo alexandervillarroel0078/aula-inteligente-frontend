@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { obtenerProfesor } from '../../services/profesorService';
 import MateriasProfesor from './MateriaProfesor';
+import PrediccionesDashboard from './PrediccionesDashboard';
 
 const TabsProfesor = () => {
     const { id } = useParams();
@@ -10,6 +11,7 @@ const TabsProfesor = () => {
     const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'Perfil');
     const [profesor, setProfesor] = useState(null);
     const navigate = useNavigate();
+
     const tabs = [
         'Perfil',
         'Materias',
@@ -55,7 +57,9 @@ const TabsProfesor = () => {
             case 'Predicción':
                 return <p>📈 Aquí se mostrarán predicciones de rendimiento académico.</p>;
             case 'Dashboard':
-                return <p>📊 Aquí se mostrará el resumen de estadísticas del profesor.</p>;
+                return <PrediccionesDashboard profesorId={profesor.id} />;
+
+
             case 'Configuración':
                 return <p>⚙️ Aquí van las opciones de configuración de la cuenta del profesor.</p>;
             default:
@@ -68,7 +72,7 @@ const TabsProfesor = () => {
 
     return (
         <div className="p-4">
-            
+
             {/* Encabezado */}
             <div className="mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">{profesor.nombre}</h2>
